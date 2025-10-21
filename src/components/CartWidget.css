@@ -1,0 +1,27 @@
+.cart-widget-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.cart-icon {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.cart-item-count {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.75rem;
+    background-color: #ef4444;
+    color: white;
+    font-size: 0.75rem;
+    border-radius: 9999px;
+    height: 1.25rem;
+    width: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
