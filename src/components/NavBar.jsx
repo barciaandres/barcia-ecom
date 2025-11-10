@@ -24,7 +24,7 @@ const NavBar = () => {
     }, []);
 
     return (
-        <Navbar expand="lg" bg="dark" data-bs-theme="dark">
+        <Navbar expand="lg" bg="dark" data-bs-theme="dark" className="mb-4">
             <Container fluid>
                 <Navbar.Brand as={Link} to="/">Barcia-Ecom</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbar-supported-content" />

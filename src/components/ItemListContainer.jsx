@@ -45,7 +45,7 @@ function ItemListContainer() {
             <Row>
                 {products.map((product) => (
                     <Col lg={4} key={product.id}>
-                        <Card >
+                        <Card className='mb-4'>
                             <Card.Img variant="top" src={product.thumbnail} />
                             <Card.Body>
                                 <Card.Title>{product.title}</Card.Title>
