@@ -9,10 +9,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/barcia-ecom/">
       <App />
     </BrowserRouter>
   </StrictMode>,
 )
-
-/*basename="/barcia-ecom/" */
