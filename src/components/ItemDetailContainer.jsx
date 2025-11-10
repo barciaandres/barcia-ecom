@@ -1,32 +1,28 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import ItemList from './ItemList';
+import ItemDetail from './ItemDetail';
 
-function ItemListContainer() {
-    const [products, setProducts] = useState([]);
+function ItemDetailContainer() {
+    const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { categoryId } = useParams();
+    const { productId } = useParams();
 
     useEffect(() => {
         setLoading(true);
         setError(null);
 
-        const url = categoryId
-            ? `https://dummyjson.com/products/category/${categoryId}`
-            : 'https://dummyjson.com/products';
-
-        fetch(url)
+        fetch(`https://dummyjson.com/products/${productId}`)
             .then((res) => res.json())
             .then((data) => {
-                setProducts(data.products);
+                setProduct(data);
                 setLoading(false);
             })
             .catch((err) => {
                 setError(err);
                 setLoading(false);
             });
-    }, [categoryId]);
+    }, [productId]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -37,8 +33,8 @@ function ItemListContainer() {
     }
 
     return (
-        <ItemList products={products} />
+        <ItemDetail product={product} />
     );
 }
 
-export default ItemListContainer;
+export default ItemDetailContainer;
