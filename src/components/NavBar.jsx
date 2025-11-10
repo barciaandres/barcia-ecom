@@ -16,7 +16,7 @@ const NavBar = () => {
                 const data = await response.json();
                 setCategories(data);
             } catch (error) {
-                console.error("Error fetching categories:", error);
+                console.error("Error obteniendo categorías:", error);
             }
         };
 
