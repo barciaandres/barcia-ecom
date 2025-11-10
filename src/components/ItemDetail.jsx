@@ -25,7 +25,7 @@ function ItemDetail({ product }) {
                             <Card.Text>Precio: ${product.price}</Card.Text>
                             <Card.Text>Rating: {product.rating}/5</Card.Text>
                             <Card.Text>Stock: {product.stock}</Card.Text>
-                            <ItemCount stock={product.stock} initial={1} onAdd={() => { console.log('Producto agregado al carrito'); }} />
+                            <ItemCount stock={product.stock} initial={1} />
                         </Card.Body>
                     </Card>
                 </Col>
