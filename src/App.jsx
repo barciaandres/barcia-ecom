@@ -1,14 +1,15 @@
-
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
 import NavBar from './components/NavBar.jsx'
 import ItemListContainer from './components/ItemListContainer.jsx'
-function App() {
-  const mensajeBienvenida = "Bienvenido a la tienda del Colo Barcia para vehículos";
 
+function App() {
   return (
     <>
       <NavBar />
-      <ItemListContainer welcome={mensajeBienvenida} />
+      <Routes>
+        <Route path='/' element={<ItemListContainer />} />
+        <Route path='/categories/:categoryId' element={<ItemListContainer />} />
+      </Routes>
     </>
   );
 }
