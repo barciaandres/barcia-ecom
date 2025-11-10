@@ -25,7 +25,7 @@ function ItemDetailContainer() {
     }, [productId]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>Cargando Detalle del producto</div>;
     }
 
     if (error) {
