@@ -50,7 +50,7 @@ function ItemListContainer() {
                             <Card.Body>
                                 <Card.Title>{product.title}</Card.Title>
                                 <Card.Text>{product.description}</Card.Text>
-                                <Button variant="primary">View Details</Button>
+                                <Button variant="primary">Ver producto</Button>
                             </Card.Body>
                         </Card>
                     </Col>
