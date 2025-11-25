@@ -1,10 +1,22 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import ItemCount from './ItemCount';
+import { useCart } from '../context/CartContext';
 
 function ItemDetail({ product }) {
+    const [quantityAdded, setQuantityAdded] = useState(0);
+    const { addItem } = useCart();
+
+    const handleOnAdd = (quantity) => {
+        setQuantityAdded(quantity);
+        addItem(product, quantity);
+    };
+
     if (!product) {
         return <div>Producto no encontrado.</div>;
     }
@@ -25,7 +37,13 @@ function ItemDetail({ product }) {
                             <Card.Text>Precio: ${product.price}</Card.Text>
                             <Card.Text>Rating: {product.rating}/5</Card.Text>
                             <Card.Text>Stock: {product.stock}</Card.Text>
-                            <ItemCount stock={product.stock} initial={1} />
+                            {quantityAdded > 0 ? (
+                                <Link to='/cart'>
+                                    <Button variant="success">Terminar compra</Button>
+                                </Link>
+                            ) : (
+                                <ItemCount stock={product.stock} initial={1} onAdd={handleOnAdd} />
+                            )}
                         </Card.Body>
                     </Card>
                 </Col>

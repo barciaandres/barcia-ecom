@@ -1,11 +1,23 @@
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Container from 'react-bootstrap/Container';
+import { useCart } from '../context/CartContext';
 
 const CartWidget = () => {
-    const itemCount = 12;
+    const { totalQuantity } = useCart();
+
     return (
-        <button className="btn btn-outline-success" type="button">
-            <i className={`bi ${itemCount > 0 ? 'bi-cart-fill' : 'bi-cart'}`}> </i>
-            <span className="badge rounded-pill bg-danger">{itemCount}</span>
-        </button>
+        <Container>
+            <Link to='/cart' style={{ display: totalQuantity() > 0 ? 'block' : 'none' }}>
+                <ButtonGroup>
+                    <Button variant="outline-success">
+                        <i className="bi bi-cart-fill"> </i>
+                        <span className="badge rounded-pill bg-danger">{totalQuantity()}</span>
+                    </Button>
+                </ButtonGroup>
+            </Link>
+        </Container>
     );
 };
 
