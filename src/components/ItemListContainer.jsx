@@ -19,10 +19,8 @@ function ItemListContainer() {
         fetch(url)
             .then((res) => res.json())
             .then((data) => {
-                setTimeout(() => {
-                    setProducts(data.products);
-                    setLoading(false);
-                }, 1000);
+                setProducts(data.products);
+                setLoading(false);
             })
             .catch((err) => {
                 setError(err);

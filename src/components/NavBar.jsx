@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import CartWidget from "./CartWidget";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -33,7 +33,7 @@ const NavBar = () => {
                         <Nav.Link as={Link} to="/" active>Home</Nav.Link>
                         <NavDropdown title="Categorías" id="basic-nav-dropdown">
                             {categories.map((category) => (
-                                <NavDropdown.Item as={Link} key={category.slug} to={`/categories/${category.slug}`}>
+                                <NavDropdown.Item as={NavLink} key={category.slug} to={`/categories/${category.slug}`}>
                                     {category.name}
                                 </NavDropdown.Item>
                             ))}
