@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { getCategories } from "../firebase/db";
 import { Link, NavLink } from "react-router-dom";
 import CartWidget from "./CartWidget";
 import Container from 'react-bootstrap/Container';
@@ -12,8 +13,7 @@ const NavBar = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('https://dummyjson.com/products/categories');
-                const data = await response.json();
+                const data = await getCategories();
                 setCategories(data);
             } catch (error) {
                 console.error("Error obteniendo categorías:", error);
@@ -33,11 +33,12 @@ const NavBar = () => {
                         <Nav.Link as={Link} to="/" active>Home</Nav.Link>
                         <NavDropdown title="Categorías" id="basic-nav-dropdown">
                             {categories.map((category) => (
-                                <NavDropdown.Item as={NavLink} key={category.slug} to={`/categories/${category.slug}`}>
+                                <NavDropdown.Item as={NavLink} key={category.id} to={`/categories/${category.slug}`}>
                                     {category.name}
                                 </NavDropdown.Item>
                             ))}
                         </NavDropdown>
+                        <Nav.Link as={Link} to="/orders">Ordenes</Nav.Link>
                     </Nav>
                     <Nav.Link as={Link} to="/cart">
                         <CartWidget />
