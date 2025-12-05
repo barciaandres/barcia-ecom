@@ -1,21 +1,16 @@
-import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
+import Image from 'react-bootstrap/Image';
+import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import EmptyCart from './EmptyCart';
 
 const Cart = () => {
     const { cart, removeItem, clearCart, totalAmount } = useCart();
 
     if (cart.length === 0) {
-        return (
-            <Container className="mt-5">
-                <h1>Tu carrito está vacío</h1>
-                <Link to='/'>
-                    <Button variant="primary">Volver a la tienda</Button>
-                </Link>
-            </Container>
-        );
+        return <EmptyCart />;
     }
 
     return (
@@ -24,6 +19,7 @@ const Cart = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Precio Unitario</th>
@@ -33,13 +29,14 @@ const Cart = () => {
                 </thead>
                 <tbody>
                     {cart.map(item => (
-                        <tr key={item.id}>
+                        <tr key={item.firestoreId} className="align-middle">
+                            <td><Image src={item.thumbnail} alt={item.title} fluid width={50} /></td>
                             <td>{item.title}</td>
                             <td>{item.quantity}</td>
                             <td>${item.price}</td>
                             <td>${item.quantity * item.price}</td>
                             <td>
-                                <Button variant="danger" onClick={() => removeItem(item.id)}>
+                                <Button variant="danger" onClick={() => removeItem(item.firestoreId)}>
                                     Eliminar
                                 </Button>
                             </td>
@@ -50,7 +47,9 @@ const Cart = () => {
             <h3>Total: ${totalAmount()}</h3>
             <div className="d-flex justify-content-between mt-4">
                 <Button variant="danger" onClick={clearCart}>Vaciar Carrito</Button>
-                <Button variant="success">Finalizar Compra</Button>
+                <Link to="/checkout">
+                    <Button variant="success">Finalizar Compra</Button>
+                </Link>
             </div>
         </Container>
     );

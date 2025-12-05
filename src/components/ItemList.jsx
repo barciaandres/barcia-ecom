@@ -10,13 +10,13 @@ function ItemList({ products }) {
         <Container>
             <Row>
                 {products.map((product) => (
-                    <Col lg={4} key={product.id}>
+                    <Col lg={4} key={product.firestoreId}>
                         <Card className='mb-4'>
                             <Card.Img variant="top" src={product.thumbnail} />
                             <Card.Body>
                                 <Card.Title>{product.title}</Card.Title>
                                 <Card.Text>{product.description}</Card.Text>
-                                <Button as={Link} to={`/products/${product.id}`} variant="primary">Ver producto</Button>
+                                <Button as={Link} to={`/products/${product.firestoreId}`} variant="primary">Ver producto</Button>
                             </Card.Body>
                         </Card>
                     </Col>

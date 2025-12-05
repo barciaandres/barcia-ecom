@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ItemList from './ItemList';
+import { getProducts, getProductsByCategory } from '../firebase/db'
 
 function ItemListContainer() {
     const [products, setProducts] = useState([]);
@@ -12,20 +13,20 @@ function ItemListContainer() {
         setLoading(true);
         setError(null);
 
-        const url = categoryId
-            ? `https://dummyjson.com/products/category/${categoryId}`
-            : 'https://dummyjson.com/products';
-
-        fetch(url)
-            .then((res) => res.json())
-            .then((data) => {
-                setProducts(data.products);
-                setLoading(false);
-            })
-            .catch((err) => {
+        const fetchProducts = async () => {
+            try {
+                const data = categoryId
+                    ? await getProductsByCategory(categoryId)
+                    : await getProducts();
+                setProducts(data);
+            } catch (err) {
                 setError(err);
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
+
+        fetchProducts();
     }, [categoryId]);
 
     if (loading) {

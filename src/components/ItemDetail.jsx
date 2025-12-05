@@ -1,25 +1,35 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 import ItemCount from './ItemCount';
 import { useCart } from '../context/CartContext';
+import Swal from 'sweetalert2';
 
 function ItemDetail({ product }) {
-    const [quantityAdded, setQuantityAdded] = useState(0);
-    const { addItem } = useCart();
+    const { addItem, cart } = useCart();
 
     const handleOnAdd = (quantity) => {
-        setQuantityAdded(quantity);
         addItem(product, quantity);
+        Swal.fire({
+            icon: 'success',
+            title: '¡Agregado!',
+            text: `Se ${quantity > 1 ? 'agregaron' : 'agregó'} ${quantity} ${quantity > 1 ? 'items' : 'item'} (${product.title}) al carrito`,
+            showConfirmButton: false,
+            timer: 2500
+        });
     };
 
     if (!product) {
         return <div>Producto no encontrado.</div>;
     }
+
+    const itemInCart = cart.find(item => item.firestoreId === product.firestoreId);
+    const quantityInCart = itemInCart ? itemInCart.quantity : 0;
+    const availableStock = product.stock - quantityInCart;
 
     return (
         <Container>
@@ -37,13 +47,18 @@ function ItemDetail({ product }) {
                             <Card.Text>Precio: ${product.price}</Card.Text>
                             <Card.Text>Rating: {product.rating}/5</Card.Text>
                             <Card.Text>Stock: {product.stock}</Card.Text>
-                            {quantityAdded > 0 ? (
-                                <Link to='/cart'>
+
+                            {availableStock > 0 ? (
+                                <ItemCount stock={availableStock} initial={1} onAdd={handleOnAdd} />
+                            ) : (
+                                <Alert variant="warning">No hay más stock disponible para este producto.</Alert>
+                            )}
+
+                            {cart.length > 0 &&
+                                <Link to='/cart' className="mt-3 d-block">
                                     <Button variant="success">Terminar compra</Button>
                                 </Link>
-                            ) : (
-                                <ItemCount stock={product.stock} initial={1} onAdd={handleOnAdd} />
-                            )}
+                            }
                         </Card.Body>
                     </Card>
                 </Col>
@@ -52,4 +67,4 @@ function ItemDetail({ product }) {
     );
 }
 
-export default ItemDetail
+export default ItemDetail;
