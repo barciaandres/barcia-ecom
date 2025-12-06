@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ItemDetail from './ItemDetail';
 import { getProductById } from '../firebase/db';
+import LoadingSpinner from './LoadingSpinner';
+
 
 function ItemDetailContainer() {
     const [product, setProduct] = useState(null);
@@ -28,7 +30,7 @@ function ItemDetailContainer() {
     }, [productId]);
 
     if (loading) {
-        return <div>Cargando Detalle del producto</div>;
+        return (<LoadingSpinner />);
     }
 
     if (error) {
