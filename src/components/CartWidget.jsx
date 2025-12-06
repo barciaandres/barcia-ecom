@@ -4,16 +4,21 @@ import { useCart } from '../context/CartContext';
 
 const CartWidget = () => {
     const { totalQuantity } = useCart();
+    const quantity = totalQuantity();
 
     return (
-        <div style={{ display: totalQuantity() > 0 ? 'block' : 'none' }}>
-            <ButtonGroup>
+        <ButtonGroup>
+            {quantity > 0 ? (
                 <Button variant="outline-success">
                     <i className="bi bi-cart-fill"> </i>
-                    <span className="badge rounded-pill bg-danger">{totalQuantity()}</span>
+                    <span className="badge rounded-pill bg-danger">{quantity}</span>
                 </Button>
-            </ButtonGroup>
-        </div>
+            ) : (
+                <Button variant="outline-secondary">
+                    <i className="bi bi-cart"></i>
+                </Button>
+            )}
+        </ButtonGroup>
     );
 };
 

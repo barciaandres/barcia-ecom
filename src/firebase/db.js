@@ -1,4 +1,4 @@
-import { getFirestore, collection, addDoc, getDocs, writeBatch, doc, query, where, getDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, writeBatch, doc, query, where, getDoc, serverTimestamp, orderBy } from "firebase/firestore";
 import { app } from "./config.js";
 
 const db = getFirestore(app);
@@ -80,7 +80,8 @@ export const createOrder = async (order) => {
 
             if (product.stock >= cartItem.quantity) {
                 batch.update(docSnap.ref, { stock: product.stock - cartItem.quantity });
-            } else {
+            }
+            else {
                 outOfStock.push({ ...product, id: docSnap.id });
             }
         }
@@ -100,7 +101,9 @@ export const createOrder = async (order) => {
 
 export const getOrders = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, "orders"));
+        const ordersRef = collection(db, "orders");
+        const q = query(ordersRef, orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q);
         const orders = [];
         querySnapshot.forEach((doc) => {
             orders.push({ id: doc.id, ...doc.data() });
@@ -111,6 +114,3 @@ export const getOrders = async () => {
         return [];
     }
 };
-
-
-

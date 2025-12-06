@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
@@ -10,9 +11,11 @@ import { useCart } from '../context/CartContext';
 
 function ItemDetail({ product }) {
     const { addItem, cart } = useCart();
+    const [isAdded, setIsAdded] = useState(false);
 
     const handleOnAdd = (quantity) => {
         addItem(product, quantity);
+        setIsAdded(true);
     };
 
     if (!product) {
@@ -39,16 +42,22 @@ function ItemDetail({ product }) {
                             <Card.Text>Precio: ${product.price}</Card.Text>
                             <Card.Text>Rating: {product.rating}/5</Card.Text>
                             <Card.Text>Stock: {product.stock}</Card.Text>
-                            {availableStock > 0 ? (
-                                <ItemCount stock={availableStock} initial={1} onAdd={handleOnAdd} />
+                            {isAdded ? (
+                                <>
+                                    <Link to='/' className="mt-3 d-block">
+                                        <Button variant="primary">Seguir comprando</Button>
+                                    </Link>
+                                    <Link to='/cart' className="mt-3 d-block">
+                                        <Button variant="success">Revisar y terminar compra</Button>
+                                    </Link>
+                                </>
                             ) : (
-                                <Alert variant="warning">No hay más stock disponible para este producto.</Alert>
+                                availableStock > 0 ? (
+                                    <ItemCount stock={availableStock} initial={1} onAdd={handleOnAdd} />
+                                ) : (
+                                    <Alert variant="warning">No hay más stock disponible para este producto.</Alert>
+                                )
                             )}
-                            {cart.length > 0 &&
-                                <Link to='/cart' className="mt-3 d-block">
-                                    <Button variant="success">Terminar compra</Button>
-                                </Link>
-                            }
                         </Card.Body>
                     </Card>
                 </Col>
