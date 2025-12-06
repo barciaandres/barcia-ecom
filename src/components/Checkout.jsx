@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { createOrder } from '../firebase/db';
 import Swal from 'sweetalert2';
@@ -69,6 +70,9 @@ function Checkout() {
                                 <Alert variant="success">
                                     <strong>{orderId}</strong>
                                 </Alert>
+                                <Link to="/orders">
+                                    <Button variant="primary">Ver todas mis órdenes</Button>
+                                </Link>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -79,7 +83,6 @@ function Checkout() {
 
     const quantity = totalQuantity();
     const amount = totalAmount();
-
     return (
         <Container>
             <Row className="justify-content-md-center mt-4">
@@ -88,7 +91,7 @@ function Checkout() {
                         <Card.Header as="h3">Finalizar compra</Card.Header>
                         <Card.Body>
                             <Alert variant="light">
-                                Estás comprando <strong>{quantity}</strong> producto(s) por un total de <strong>${amount}</strong>.
+                                Estás comprando <strong>{quantity}</strong> {quantity === 1 ? 'producto' : 'productos'} por un total de <strong>${amount}</strong>.
                             </Alert>
                             <Alert variant="info">
                                 Para finalizar tu compra, por favor completa los siguientes datos.

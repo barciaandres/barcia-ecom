@@ -27,41 +27,46 @@ function ItemDetail({ product }) {
     const availableStock = product.stock - quantityInCart;
 
     return (
-        <Container>
-            <Row>
-                <Col lg={5}>
-                    <Card>
-                        <Card.Img variant="top" src={product.thumbnail} />
-                    </Card>
-                </Col>
-                <Col lg={5}>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>{product.title}</Card.Title>
-                            <Card.Text>{product.description}</Card.Text>
-                            <Card.Text>Precio: ${product.price}</Card.Text>
-                            <Card.Text>Rating: {product.rating}/5</Card.Text>
-                            <Card.Text>Stock: {product.stock}</Card.Text>
-                            {quantityInCart > 0 && (
-                                <Card.Text>En carrito: {quantityInCart}</Card.Text>
-                            )}
-                            {isAdded ? (
-                                <>
-                                    <Link to='/' className="mt-3 d-block">
-                                        <Button variant="primary">Seguir comprando</Button>
-                                    </Link>
-                                    <Link to='/cart' className="mt-3 d-block">
-                                        <Button variant="success">Revisar y terminar compra</Button>
-                                    </Link>
-                                </>
-                            ) : (
-                                availableStock > 0 ? (
-                                    <ItemCount stock={availableStock} initial={1} onAdd={handleOnAdd} />
-                                ) : (
-                                    <Alert variant="warning">No hay más stock disponible para este producto.</Alert>
-                                )
-                            )}
-                        </Card.Body>
+        <Container className="my-4">
+            <Row className="justify-content-center">
+                <Col md={10} lg={9}>
+                    <Card as="article" className="shadow-sm">
+                        <Row className="g-0">
+                            <Col lg={5} className="d-flex justify-content-center align-items-center p-3">
+                                <img src={product.thumbnail} alt={product.title} className="img-fluid rounded" />
+                            </Col>
+                            <Col lg={7}>
+                                <Card.Body className="d-flex flex-column p-4 h-100">
+                                    <Card.Title as="h2" className="mb-3">{product.title}</Card.Title>
+                                    <Card.Text className="fs-4 mb-3">
+                                        <strong>Precio:</strong> ${product.price}
+                                    </Card.Text>
+                                    {isAdded ? (
+                                        <div className="d-grid gap-2 mt-auto">
+                                            <Button as={Link} to='/' variant="primary" size="sm">Seguir comprando</Button>
+                                            <Button as={Link} to='/cart' variant="success" size="sm">Revisar y terminar compra</Button>
+                                        </div>
+                                    ) : (
+                                        availableStock > 0 ? (
+                                            <ItemCount stock={availableStock} initial={1} onAdd={handleOnAdd} />
+                                        ) : (
+                                            <Alert variant="warning">No hay más stock disponible.</Alert>
+                                        )
+                                    )}
+                                    {quantityInCart > 0 && (
+                                        <Alert variant="info" className="mt-2 text-center">
+                                            Ya tienes {quantityInCart} {quantityInCart === 1 ? 'unidad' : 'unidades'} en el carrito.
+                                        </Alert>
+                                    )}
+                                    <hr className="my-4" />
+                                    <Card.Text className="text-muted">{product.description}</Card.Text>
+                                    <Container className='d-flex justify-content-between mt-3'>
+                                        <Card.Text><small><strong>Rating:</strong> {product.rating}/5</small></Card.Text>
+                                        <Card.Text><small><strong>Stock:</strong> {product.stock}</small></Card.Text>
+                                    </Container>
+                                </Card.Body>
+                            </Col>
+                        </Row>
                     </Card>
                 </Col>
             </Row>

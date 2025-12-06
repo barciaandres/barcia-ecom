@@ -15,7 +15,7 @@ function CartItemCount({ item }) {
             <Button variant="outline-success ms-1" onClick={() => increaseQuantity(item.firestoreId)} disabled={item.quantity >= item.stock}>
                 +
             </Button>
-            <Button variant="outline-danger ms-4" onClick={() => removeItem(item.firestoreId)}>
+            <Button variant="outline-danger ms-2" onClick={() => removeItem(item.firestoreId)}>
                 <i className="bi bi-trash3"></i>
             </Button>
         </ButtonGroup>
