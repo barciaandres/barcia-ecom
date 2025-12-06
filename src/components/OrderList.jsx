@@ -9,7 +9,7 @@ function OrderList({ orders }) {
 
     return (
         <Container className="mt-5">
-            <h1>Ordenes</h1>
+            <h1>Ordenes de compra</h1>
             <Accordion defaultActiveKey="0">
                 {orders.map((order, index) => (
                     <Accordion.Item eventKey={index.toString()} key={order.id}>

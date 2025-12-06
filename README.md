@@ -17,7 +17,7 @@ This is a simple e-commerce application built with React, Vite, and Firebase.
     *   [Vite](https://vitejs.dev/)
     *   [React Router](https://reactrouter.com/)
     *   [Bootstrap](https://getbootstrap.com/) & [React-Bootstrap](https://react-bootstrap.github.io/) for styling.
-    *   [SweetAlert2](https://sweetalert2.github.io/) for user-friendly notifications.
+    *   [React Toastify](https://fkhadra.github.io/react-toastify/introduction/) & [SweetAlert2](https://sweetalert2.github.io/) for user-friendly notifications.
 *   **Backend:**
     *   [Firebase](https://firebase.google.com/) (Firestore for the database).
 

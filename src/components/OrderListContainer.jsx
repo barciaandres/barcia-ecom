@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getOrders } from '../firebase/db';
 import OrderList from './OrderList';
+import { Spinner } from 'react-bootstrap';
+
 
 function OrderListContainer() {
     const [orders, setOrders] = useState([]);
@@ -26,7 +28,13 @@ function OrderListContainer() {
     }, []);
 
     if (loading) {
-        return <div>Cargando ordenes...</div>;
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Cargando ordenes...</span>
+                </Spinner>
+            </div>
+        );
     }
 
     if (error) {
