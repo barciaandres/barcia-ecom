@@ -10,12 +10,26 @@ function ItemList({ products }) {
         <Container>
             <Row>
                 {products.map((product) => (
-                    <Col lg={4} key={product.firestoreId}>
+                    <Col xs={6} md={4} lg={3} key={product.firestoreId}>
                         <Card className='mb-4'>
                             <Card.Img variant="top" src={product.thumbnail} />
-                            <Card.Body>
-                                <Card.Title>{product.title}</Card.Title>
-                                <Card.Text>{product.description}</Card.Text>
+                            <Card.Body className="d-flex flex-column justify-content-between">
+                                <Card.Title style={{
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: 1,
+                                    WebkitBoxOrient: 'vertical'
+                                }}>{product.title}</Card.Title>
+                                <Card.Text style={{
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: 3,
+                                    WebkitBoxOrient: 'vertical'
+                                }}>
+                                    {product.description}
+                                </Card.Text>
                                 <Button as={Link} to={`/products/${product.firestoreId}`} variant="primary">Ver producto</Button>
                             </Card.Body>
                         </Card>
