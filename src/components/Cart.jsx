@@ -34,7 +34,7 @@ const Cart = () => {
                             <td>{item.title}</td>
                             <td>{item.quantity}</td>
                             <td>${item.price}</td>
-                            <td>${item.quantity * item.price}</td>
+                            <td>${(item.quantity * item.price).toFixed(2)}</td>
                             <td>
                                 <Button variant="danger" onClick={() => removeItem(item.firestoreId)}>
                                     Eliminar

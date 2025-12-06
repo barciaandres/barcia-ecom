@@ -63,7 +63,8 @@ function CartProvider({ children }) {
     };
 
     const totalAmount = () => {
-        return cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
+        const total = cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
+        return parseFloat(total.toFixed(2));
     };
 
     return <CartContext.Provider value={{ cart, addItem, removeItem, clearCart, isInCart, totalQuantity, totalAmount }}>
