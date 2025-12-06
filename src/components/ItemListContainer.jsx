@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Spinner, Alert } from 'react-bootstrap';
 import ItemList from './ItemList';
 import { getProducts, getProductsByCategory } from '../firebase/db'
 
@@ -30,11 +31,23 @@ function ItemListContainer() {
     }, [categoryId]);
 
     if (loading) {
-        return <div>Cargando productos...</div>;
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Cargando productos...</span>
+                </Spinner>
+            </div>
+        );
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+                <Alert variant="danger">
+                    Error: {error.message}
+                </Alert>
+            </div>
+        );
     }
 
     return (

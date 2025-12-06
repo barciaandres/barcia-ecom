@@ -1,22 +1,30 @@
 import CartContext from './CartContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
-
+import { notify } from '../utils/Notifications'
 
 function CartProvider({ children }) {
-    const [cart, setCart] = useState([])
-
+    const [cart, setCart] = useState(() => {
+        try {
+            const savedCart = window.localStorage.getItem('cart');
+            return savedCart ? JSON.parse(savedCart) : [];
+        } catch (error) {
+            return [];
+        }
+    });
+    useEffect(() => {
+        try {
+            window.localStorage.setItem('cart', JSON.stringify(cart));
+        } catch (error) {
+            console.error("Error al guardar el carrito", error);
+        }
+    }, [cart]);
     const addItem = (item, quantity) => {
         const { firestoreId, stock, title } = item;
-
         if (isInCart(firestoreId)) {
             const itemInCart = cart.find(cartItem => cartItem.firestoreId === firestoreId);
             if (itemInCart.quantity + quantity > stock) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Stock insuficiente',
-                    text: `No puedes agregar más items de los que hay en stock. Stock disponible: ${stock}, en carrito: ${itemInCart.quantity}.`
-                });
+                notify(`No puedes agregar más items de los que hay en stock. Stock disponible: ${stock}, en carrito: ${itemInCart.quantity}.`, 'error')
                 return;
             }
             setCart(prevCart => prevCart.map(cartItem => {
@@ -27,23 +35,12 @@ function CartProvider({ children }) {
             }));
         } else {
             if (quantity > stock) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Stock insuficiente',
-                    text: `No puedes agregar más items de los que hay en stock. Stock disponible: ${stock}.`
-                });
+                notify(`No puedes agregar más items de los que hay en stock. Stock disponible: ${stock}.`, 'error')
                 return;
             }
             setCart(prevCart => [...prevCart, { ...item, quantity }]);
         }
-
-        Swal.fire({
-            icon: 'success',
-            title: '¡Agregado!',
-            text: `Se ${quantity > 1 ? 'agregaron' : 'agregó'} ${quantity} ${quantity > 1 ? 'items' : 'item'} (${title}) al carrito`,
-            showConfirmButton: false,
-            timer: 2500
-        });
+        notify(`Se ${quantity > 1 ? 'agregaron' : 'agregó'} ${quantity} ${quantity > 1 ? 'items' : 'item'} (${title}) al carrito`, 'success');
     };
 
     const removeItem = (itemFirestoreId) => {

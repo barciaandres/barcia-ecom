@@ -1,4 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import CartProvider from './context/CartProvider.jsx';
 import NavBar from './components/NavBar.jsx'
 import ItemListContainer from './components/ItemListContainer.jsx'
@@ -12,6 +14,7 @@ function App() {
   return (
     <CartProvider>
       <NavBar />
+      <ToastContainer />
       <Routes>
         <Route path='/' element={<ItemListContainer />} />
         <Route path='/categories/:categoryId' element={<ItemListContainer />} />
