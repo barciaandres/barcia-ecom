@@ -16,10 +16,9 @@ const Cart = () => {
     return (
         <Container className="mt-5">
             <h1>Carrito de Compras</h1>
-            <Table striped bordered hover>
+            <Table striped bordered hover responsive="sm">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>Producto</th>
                         <th>Cantidad</th>
                         <th>Precio Unitario</th>
@@ -30,8 +29,10 @@ const Cart = () => {
                 <tbody>
                     {cart.map(item => (
                         <tr key={item.firestoreId} className="align-middle">
-                            <td><Image src={item.thumbnail} alt={item.title} fluid width={50} /></td>
-                            <td>{item.title}</td>
+                            <td className="d-flex align-items-center">
+                                <Image src={item.thumbnail} alt={item.title} style={{ width: '50px', minWidth: '50px' }} className="me-3" />
+                                <span>{item.title}</span>
+                            </td>
                             <td>{item.quantity}</td>
                             <td>${item.price}</td>
                             <td>${(item.quantity * item.price).toFixed(2)}</td>
