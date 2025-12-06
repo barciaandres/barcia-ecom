@@ -5,6 +5,7 @@ import Image from 'react-bootstrap/Image';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import EmptyCart from './EmptyCart';
+import CartItemCount from './CartItemCount';
 
 const Cart = () => {
     const { cart, removeItem, clearCart, totalAmount } = useCart();
@@ -16,31 +17,28 @@ const Cart = () => {
     return (
         <Container className="mt-5">
             <h1>Carrito de Compras</h1>
-            <Table striped bordered hover responsive="sm">
+            <Table striped bordered hover responsive="sm" size="sm">
                 <thead>
                     <tr>
                         <th>Producto</th>
                         <th>Cantidad</th>
-                        <th>Precio Unitario</th>
+                        <th className="d-none d-md-table-cell">Precio Unitario</th>
                         <th>Subtotal</th>
-                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {cart.map(item => (
                         <tr key={item.firestoreId} className="align-middle">
-                            <td className="d-flex align-items-center">
-                                <Image src={item.thumbnail} alt={item.title} style={{ width: '50px', minWidth: '50px' }} className="me-3" />
-                                <span>{item.title}</span>
+                            <td className="d-flex align-items-center" style={{ minWidth: '150px' }}>
+                                <Image src={item.thumbnail} alt={item.title} style={{ width: '40px', minWidth: '40px' }} className="me-2" />
+                                <div className="d-flex flex-column">
+                                    <span style={{ fontSize: '0.9rem' }}>{item.title}</span>
+                                    <small className="d-md-none text-muted">${item.price}</small>
+                                </div>
                             </td>
-                            <td>{item.quantity}</td>
-                            <td>${item.price}</td>
-                            <td>${(item.quantity * item.price).toFixed(2)}</td>
-                            <td>
-                                <Button variant="danger" onClick={() => removeItem(item.firestoreId)}>
-                                    Eliminar
-                                </Button>
-                            </td>
+                            <td><CartItemCount item={item} /></td>
+                            <td className="d-none d-md-table-cell">${item.price}</td>
+                            <td className="fw-bold">${(item.quantity * item.price).toFixed(2)}</td>
                         </tr>
                     ))}
                 </tbody>

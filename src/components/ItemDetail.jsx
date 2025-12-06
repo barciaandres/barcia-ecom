@@ -29,12 +29,12 @@ function ItemDetail({ product }) {
     return (
         <Container>
             <Row>
-                <Col lg={6}>
+                <Col lg={5}>
                     <Card>
                         <Card.Img variant="top" src={product.thumbnail} />
                     </Card>
                 </Col>
-                <Col lg={6}>
+                <Col lg={5}>
                     <Card>
                         <Card.Body>
                             <Card.Title>{product.title}</Card.Title>
@@ -42,6 +42,9 @@ function ItemDetail({ product }) {
                             <Card.Text>Precio: ${product.price}</Card.Text>
                             <Card.Text>Rating: {product.rating}/5</Card.Text>
                             <Card.Text>Stock: {product.stock}</Card.Text>
+                            {quantityInCart > 0 && (
+                                <Card.Text>En carrito: {quantityInCart}</Card.Text>
+                            )}
                             {isAdded ? (
                                 <>
                                     <Link to='/' className="mt-3 d-block">
