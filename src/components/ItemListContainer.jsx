@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Spinner, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import ItemList from './ItemList';
 import { getProducts, getProductsByCategory } from '../firebase/db'
+import LoadingSpinner from './LoadingSpinner';
 
 function ItemListContainer() {
     const [products, setProducts] = useState([]);
@@ -31,13 +32,7 @@ function ItemListContainer() {
     }, [categoryId]);
 
     if (loading) {
-        return (
-            <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Cargando productos...</span>
-                </Spinner>
-            </div>
-        );
+        return (<LoadingSpinner />);
     }
 
     if (error) {
