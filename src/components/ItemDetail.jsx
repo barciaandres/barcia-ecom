@@ -7,20 +7,12 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import ItemCount from './ItemCount';
 import { useCart } from '../context/CartContext';
-import Swal from 'sweetalert2';
 
 function ItemDetail({ product }) {
     const { addItem, cart } = useCart();
 
     const handleOnAdd = (quantity) => {
         addItem(product, quantity);
-        Swal.fire({
-            icon: 'success',
-            title: '¡Agregado!',
-            text: `Se ${quantity > 1 ? 'agregaron' : 'agregó'} ${quantity} ${quantity > 1 ? 'items' : 'item'} (${product.title}) al carrito`,
-            showConfirmButton: false,
-            timer: 2500
-        });
     };
 
     if (!product) {
@@ -47,13 +39,11 @@ function ItemDetail({ product }) {
                             <Card.Text>Precio: ${product.price}</Card.Text>
                             <Card.Text>Rating: {product.rating}/5</Card.Text>
                             <Card.Text>Stock: {product.stock}</Card.Text>
-
                             {availableStock > 0 ? (
                                 <ItemCount stock={availableStock} initial={1} onAdd={handleOnAdd} />
                             ) : (
                                 <Alert variant="warning">No hay más stock disponible para este producto.</Alert>
                             )}
-
                             {cart.length > 0 &&
                                 <Link to='/cart' className="mt-3 d-block">
                                     <Button variant="success">Terminar compra</Button>

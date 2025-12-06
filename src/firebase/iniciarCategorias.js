@@ -21,7 +21,7 @@ const seedCategories = async () => {
 
         await batch.commit();
 
-        console.log('Categories agregadas correctamente');
+        console.log('Todo ok');
 
     } catch (error) {
         console.error('Error al agregar categories: ', error);

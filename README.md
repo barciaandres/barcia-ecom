@@ -1,16 +1,84 @@
-# React + Vite
+# Barcia E-commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple e-commerce application built with React, Vite, and Firebase.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*   Browse products and view them by category.
+*   View detailed information for each product.
+*   Add products to a shopping cart.
+*   A checkout form to complete purchases.
+*   A page to review all past orders.
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*   **Frontend:**
+    *   [React](https://reactjs.org/)
+    *   [Vite](https://vitejs.dev/)
+    *   [React Router](https://reactrouter.com/)
+    *   [Bootstrap](https://getbootstrap.com/) & [React-Bootstrap](https://react-bootstrap.github.io/) for styling.
+    *   [SweetAlert2](https://sweetalert2.github.io/) for user-friendly notifications.
+*   **Backend:**
+    *   [Firebase](https://firebase.google.com/) (Firestore for the database).
 
-## Expanding the ESLint configuration
+## Installation and Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/barcia-ecom.git
+    cd barcia-ecom
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure Firebase:**
+
+    The Firebase configuration is stored in `src/firebase/config.js`. For security, it is highly recommended to use environment variables instead of hardcoding your credentials.
+
+    a. Create a `.env.local` file in the root of the project:
+    ```bash
+    touch .env.local
+    ```
+
+    b. Add your Firebase project configuration to the `.env.local` file. You can get these from your Firebase project settings.
+    ```
+    VITE_API_KEY=your-api-key
+    VITE_AUTH_DOMAIN=your-auth-domain
+    VITE_PROJECT_ID=your-project-id
+    VITE_STORAGE_BUCKET=your-storage-bucket
+    VITE_MESSAGING_SENDER_ID=your-messaging-sender-id
+    VITE_APP_ID=your-app-id
+    ```
+
+    c. Update `src/firebase/config.js` to use these environment variables:
+    ```javascript
+    import { initializeApp } from "firebase/app";
+
+    const firebaseConfig = {
+        apiKey: import.meta.env.VITE_API_KEY,
+        authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+        projectId: import.meta.env.VITE_PROJECT_ID,
+        storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+        messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+        appId: import.meta.env.VITE_APP_ID
+    };
+
+    export const app = initializeApp(firebaseConfig);
+    ```
+
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+    The application will be available at `http://localhost:5173`.
+
+## Available Scripts
+
+*   `npm run dev`: Starts the development server.
+*   `npm run build`: Builds the application for production.
+*   `npm run lint`: Lints the code using ESLint.
+*   `npm run preview`: Serves the production build locally.
+*   `npm run deploy`: Deploys the application to GitHub Pages.

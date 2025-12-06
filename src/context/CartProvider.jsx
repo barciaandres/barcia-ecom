@@ -7,7 +7,7 @@ function CartProvider({ children }) {
     const [cart, setCart] = useState([])
 
     const addItem = (item, quantity) => {
-        const { firestoreId, stock } = item;
+        const { firestoreId, stock, title } = item;
 
         if (isInCart(firestoreId)) {
             const itemInCart = cart.find(cartItem => cartItem.firestoreId === firestoreId);
@@ -36,6 +36,14 @@ function CartProvider({ children }) {
             }
             setCart(prevCart => [...prevCart, { ...item, quantity }]);
         }
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Agregado!',
+            text: `Se ${quantity > 1 ? 'agregaron' : 'agregó'} ${quantity} ${quantity > 1 ? 'items' : 'item'} (${title}) al carrito`,
+            showConfirmButton: false,
+            timer: 2500
+        });
     };
 
     const removeItem = (itemFirestoreId) => {
