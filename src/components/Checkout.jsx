@@ -41,8 +41,8 @@ function Checkout() {
                 icon: 'success',
                 title: '¡Orden creada!',
                 text: `Tu número de orden es: ${id}`,
-                timer: 3000,
-                timerProgressBar: true,
+                // timer: 3000,
+                // timerProgressBar: true,
             });
         } catch (error) {
             Swal.fire({

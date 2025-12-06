@@ -1,6 +1,5 @@
 import CartContext from './CartContext'
 import { useState, useEffect } from 'react'
-import Swal from 'sweetalert2'
 import { notify } from '../utils/Notifications'
 
 function CartProvider({ children }) {
@@ -45,6 +44,7 @@ function CartProvider({ children }) {
 
     const removeItem = (itemFirestoreId) => {
         setCart(prevCart => prevCart.filter(item => item.firestoreId !== itemFirestoreId));
+        notify(`Producto eliminado del carrito`, 'success');
     };
 
     const clearCart = () => {
@@ -64,7 +64,34 @@ function CartProvider({ children }) {
         return parseFloat(total.toFixed(2));
     };
 
-    return <CartContext.Provider value={{ cart, addItem, removeItem, clearCart, isInCart, totalQuantity, totalAmount }}>
+    const increaseQuantity = (itemFirestoreId) => {
+        const itemInCart = cart.find(cartItem => cartItem.firestoreId === itemFirestoreId);
+        if (itemInCart && itemInCart.quantity >= itemInCart.stock) {
+            notify(`No puedes agregar más items de los que hay en stock. Stock disponible: ${itemInCart.stock}.`, 'error');
+            return;
+        }
+        setCart(prevCart => prevCart.map(cartItem => {
+            if (cartItem.firestoreId === itemFirestoreId) {
+                return { ...cartItem, quantity: cartItem.quantity + 1 };
+            }
+            return cartItem;
+        }));
+    };
+
+    const decreaseQuantity = (itemFirestoreId) => {
+        const itemInCart = cart.find(cartItem => cartItem.firestoreId === itemFirestoreId);
+        if (itemInCart && itemInCart.quantity <= 1) {
+            return;
+        }
+        setCart(prevCart => prevCart.map(cartItem => {
+            if (cartItem.firestoreId === itemFirestoreId) {
+                return { ...cartItem, quantity: cartItem.quantity - 1 };
+            }
+            return cartItem;
+        }));
+    };
+
+    return <CartContext.Provider value={{ cart, addItem, removeItem, clearCart, isInCart, totalQuantity, totalAmount, increaseQuantity, decreaseQuantity }}>
         {children}
     </CartContext.Provider>
 }
