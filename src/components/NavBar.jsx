@@ -1,17 +1,38 @@
 import { useState, useEffect } from "react";
 import { getCategories } from "../firebase/db";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import CartWidget from "./CartWidget";
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
-// import Container from 'react-bootstrap/Container';
-// import Nav from 'react-bootstrap/Nav';
-// import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
+import Swal from "sweetalert2";
 
 const NavBar = () => {
     const [categories, setCategories] = useState([]);
     const [expanded, setExpanded] = useState(false);
+    const { currentUser, logout } = useAuth();
+    const navigate = useNavigate();
     const closeMenu = () => setExpanded(false);
+
+    const handleLogout = async () => {
+        closeMenu();
+        try {
+            await logout();
+            Swal.fire({
+                icon: 'info',
+                title: 'Has cerrado sesión',
+                timer: 2000,
+                timerProgressBar: true,
+            });
+            navigate('/login');
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo cerrar la sesión.',
+            });
+        }
+    };
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -28,7 +49,7 @@ const NavBar = () => {
 
     return (
         <Navbar
-            expanded={expanded} // 3. Vincular el estado al Navbar
+            expanded={expanded}
             expand="lg"
             bg="dark"
             data-bs-theme="dark"
@@ -48,7 +69,7 @@ const NavBar = () => {
                 />
                 <Navbar.Collapse id="navbar-supported-content">
                     <Nav className="me-auto mb-2 mb-lg-0">
-                        <Nav.Link as={Link} to="/" active onClick={closeMenu}>
+                        <Nav.Link as={NavLink} to="/" activeclassname="active" onClick={closeMenu}>
                             Home
                         </Nav.Link>
                         <NavDropdown title="Categorías" id="basic-nav-dropdown">
@@ -63,9 +84,26 @@ const NavBar = () => {
                                 </NavDropdown.Item>
                             ))}
                         </NavDropdown>
-                        <Nav.Link as={Link} to="/orders" onClick={closeMenu}>
-                            Ordenes
-                        </Nav.Link>
+                    </Nav>
+                    <Nav className="ms-auto">
+                        {currentUser ? (
+                            <NavDropdown title={currentUser.email} id="user-nav-dropdown">
+                                <NavDropdown.Item as={Link} to="/orders" onClick={closeMenu}>Mis Órdenes</NavDropdown.Item>
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item onClick={handleLogout}>
+                                    Cerrar Sesión
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                        ) : (
+                            <>
+                                <Nav.Link as={NavLink} to="/login" activeclassname="active" onClick={closeMenu}>
+                                    Login
+                                </Nav.Link>
+                                <Nav.Link as={NavLink} to="/register" activeclassname="active" onClick={closeMenu}>
+                                    Registrarse
+                                </Nav.Link>
+                            </>
+                        )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>

@@ -99,10 +99,13 @@ export const createOrder = async (order) => {
     return newOrderRef.id;
 };
 
-export const getOrders = async () => {
+export const getOrders = async (uid) => {
+    if (!uid) {
+        throw new Error("UID de usuario no proporcionado para obtener las órdenes.");
+    }
     try {
         const ordersRef = collection(db, "orders");
-        const q = query(ordersRef, orderBy("createdAt", "desc"));
+        const q = query(ordersRef, where("buyer.uid", "==", uid), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
         const orders = [];
         querySnapshot.forEach((doc) => {

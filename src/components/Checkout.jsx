@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { createOrder } from '../firebase/db';
 import Swal from 'sweetalert2';
 import Container from 'react-bootstrap/Container';
@@ -13,13 +14,14 @@ import Alert from 'react-bootstrap/Alert';
 
 function Checkout() {
     const { cart, totalAmount, totalQuantity, clearCart } = useCart();
-    const [user, setUser] = useState({ name: '', email: '', phone: '' });
+    const { currentUser } = useAuth();
+    const [buyerData, setBuyerData] = useState({ name: '', phone: '' });
     const [loading, setLoading] = useState(false);
     const [orderId, setOrderId] = useState(null);
 
     const handleInputChange = (e) => {
-        setUser({
-            ...user,
+        setBuyerData({
+            ...buyerData,
             [e.target.name]: e.target.value
         });
     };
@@ -29,7 +31,12 @@ function Checkout() {
         setLoading(true);
 
         const order = {
-            buyer: user,
+            buyer: {
+                uid: currentUser.uid,
+                email: currentUser.email,
+                name: buyerData.name,
+                phone: buyerData.phone
+            },
             items: cart,
             total: totalAmount()
         };
@@ -42,8 +49,6 @@ function Checkout() {
                 icon: 'success',
                 title: '¡Orden creada!',
                 text: `Tu número de orden es: ${id}`,
-                // timer: 3000,
-                // timerProgressBar: true,
             });
         } catch (error) {
             Swal.fire({
@@ -94,20 +99,16 @@ function Checkout() {
                                 Estás comprando <strong>{quantity}</strong> {quantity === 1 ? 'producto' : 'productos'} por un total de <strong>${amount}</strong>.
                             </Alert>
                             <Alert variant="info">
-                                Para finalizar tu compra, por favor completa los siguientes datos.
+                                Comprando como: <strong>{currentUser.email}</strong>
                             </Alert>
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Nombre</Form.Label>
-                                    <Form.Control type="text" name="name" value={user.name} onChange={handleInputChange} placeholder="Ingresa tu nombre completo" required />
-                                </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" name="email" value={user.email} onChange={handleInputChange} placeholder="ejemplo@correo.com" required />
+                                    <Form.Control type="text" name="name" value={buyerData.name} onChange={handleInputChange} placeholder="Ingresa tu nombre completo" required />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Teléfono</Form.Label>
-                                    <Form.Control type="tel" name="phone" value={user.phone} onChange={handleInputChange} placeholder="1122334455" required />
+                                    <Form.Control type="tel" name="phone" value={buyerData.phone} onChange={handleInputChange} placeholder="1122334455" required />
                                 </Form.Group>
                                 <div className="d-grid">
                                     <Button variant="primary" type="submit" disabled={loading || cart.length === 0}>
