@@ -8,6 +8,8 @@ import productsRouter from './routes/productsRoutes.js';
 import categoriesRouter from './routes/categoriesRoutes.js';
 import ordersRouter from './routes/ordersRoutes.js';
 
+app.use(express.static('public'));
+
 // Middlewares
 app.use(cors());
 app.use(json());
