@@ -44,7 +44,7 @@ app.use(json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.redirect('/home');
+  res.redirect('/views/home');
 });
 
 // Middleware para inyectar io en las peticiones
@@ -54,7 +54,7 @@ app.use((req, res, next) => {
 });
 
 // Rutas de Vistas
-app.use('/', viewsRouter);
+app.use('/views', viewsRouter);
 
 // Rutas de la API
 app.use('/api/products', productsRouter);

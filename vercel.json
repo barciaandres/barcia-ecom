@@ -19,6 +19,10 @@
       "dest": "/backend/src/index.js"
     },
     {
+      "src": "/views/(.*)",
+      "dest": "/backend/src/index.js"
+    },
+    {
       "src": "/assets/(.*)",
       "dest": "/frontend/assets/$1"
     },
