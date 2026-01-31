@@ -1,0 +1,30 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Administración de Productos</h1>
+  <button id="show-create-form-btn" class="btn btn-primary">Crear Nuevo Producto</button>
+</div>
+
+{{!-- Formulario de Alta (oculto por defecto) --}}
+<div id="create-product-form" class="card mb-4" style="display: none;">
+  <div class="card-body">
+    <h5 class="card-title">Nuevo Producto</h5>
+    <form action="/products" method="POST">
+      {{> _product-form}}
+      <button type="submit" class="btn btn-success">Guardar</button>
+      <button type="button" id="cancel-create-btn" class="btn btn-secondary">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+{{!-- Listado de Productos --}}
+{{> _product-list-table}}
+
+<script>
+  document.getElementById('show-create-form-btn').addEventListener('click', () => {
+    document.getElementById('create-product-form').style.display = 'block';
+    document.getElementById('show-create-form-btn').style.display = 'none';
+  });
+  document.getElementById('cancel-create-btn').addEventListener('click', () => {
+    document.getElementById('create-product-form').style.display = 'none';
+    document.getElementById('show-create-form-btn').style.display = 'block';
+  });
+</script>

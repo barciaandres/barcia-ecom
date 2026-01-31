@@ -1,0 +1,11 @@
+<h1>Editar Producto</h1>
+
+<div class="card">
+  <div class="card-body">
+    <form action="/products/edit/{{product.id}}" method="POST">
+      {{> _product-form}}
+      <button type="submit" class="btn btn-success">Guardar Cambios</button>
+      <a href="/products" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+</div>

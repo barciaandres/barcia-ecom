@@ -1,0 +1,29 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Título</th>
+      <th>Marca</th>
+      <th>Categoría</th>
+      <th>Precio</th>
+      <th>Stock</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+    <tr>
+      <td>{{this.title}}</td>
+      <td>{{this.brand}}</td>
+      <td>{{this.category}}</td>
+      <td>${{this.price}}</td>
+      <td>{{this.stock}}</td>
+      <td>
+        <a href="/products/edit/{{this.firestoreId}}" class="btn btn-sm btn-warning">Editar</a>
+        <form action="/products/delete/{{this.firestoreId}}" method="POST" style="display: inline;">
+          <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

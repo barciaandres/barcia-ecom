@@ -1,0 +1,56 @@
+<h1>Productos en Tiempo Real</h1>
+
+<div id="products-list">
+  {{! acá va la lista de productos }}
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  // Variable para controlar si es la carga inicial
+  let isInitialLoad = true;
+
+  function renderProducts(products) {
+    const productsList = document.getElementById('products-list');
+    productsList.innerHTML = '';
+    const table = document.createElement('table');
+    table.classList.add('table', 'table-striped');
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+      ${products.map(product => `
+        <tr>
+          <td>${product.firestoreId}</td>
+          <td>${product.title}</td>
+          <td>${product.description}</td>
+          <td>${product.category}</td>
+          <td>$${product.price}</td>
+          <td>${product.stock}</td>
+        </tr>
+      `).join('')}
+      </tbody>
+    `;
+    productsList.appendChild(table);
+  }
+
+
+  socket.on('updateProducts', (products) => {
+    renderProducts(products);
+    if (!isInitialLoad) {
+      alert('Se actualizaron los productos.');
+    } else {
+      isInitialLoad = false;
+    }
+  });
+
+</script>
