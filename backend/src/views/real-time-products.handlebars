@@ -6,9 +6,9 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io();
+  const socket = io({ transports: ['polling'] });
 
-  // Variable para controlar si es la carga inicial
+  // Variable para ver si es la carga inicial, así el mensaje sale solo cuando hay cambios
   let isInitialLoad = true;
 
   function renderProducts(products) {

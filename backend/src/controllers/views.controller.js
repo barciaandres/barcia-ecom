@@ -56,7 +56,7 @@ const createProduct = async (req, res) => {
         });
         req.io.emit('updateProducts', products);
 
-        res.redirect('/products');
+        res.redirect('/views/products');
     } catch (error) {
         console.error("Error creando producto: ", error);
         res.status(500).send('Error del servidor al crear el producto.');
@@ -118,7 +118,7 @@ const updateProduct = async (req, res) => {
         });
         req.io.emit('updateProducts', products);
 
-        res.redirect('/products');
+        res.redirect('/views/products');
     } catch (error) {
         console.error("Error actualizando producto: ", error);
         res.status(500).send('Error del servidor al actualizar el producto.');
@@ -137,7 +137,7 @@ const deleteProduct = async (req, res) => {
         });
         req.io.emit('updateProducts', products);
         
-        res.redirect('/products');
+        res.redirect('/views/products');
     } catch (error) {
         console.error("Error eliminando producto: ", error);
         res.status(500).send('Error del servidor al eliminar el producto.');

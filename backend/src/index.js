@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new SocketServer(server, {
   cors: {
-    origin: "https://barcia-ecom.vercel.app",
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });
@@ -58,7 +58,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rutas de Vistas
+// Rutas de Vistas (Front y back en mismo server, tengo que usar /views, no puedo dejar las vistas en la raíz)
 app.use('/views', viewsRouter);
 
 // Rutas de la API
