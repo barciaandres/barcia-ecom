@@ -2,10 +2,10 @@
 
 <div class="card">
   <div class="card-body">
-    <form action="/products/edit/{{product.id}}" method="POST">
+    <form action="/views/products/edit/{{product.id}}" method="POST">
       {{> _product-form}}
       <button type="submit" class="btn btn-success">Guardar Cambios</button>
-      <a href="/products" class="btn btn-secondary">Cancelar</a>
+      <a href="/views/products" class="btn btn-secondary">Cancelar</a>
     </form>
   </div>
 </div>
