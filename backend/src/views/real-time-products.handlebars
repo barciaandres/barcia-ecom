@@ -1,7 +1,7 @@
 <style>
   @keyframes highlight-fade {
     from {
-      background-color: #d4edda;
+      background-color: #df0d0d;
     }
 
     to {
@@ -9,8 +9,8 @@
     }
   }
 
-  .highlight {
-    animation: highlight-fade 3s ease-out;
+  .highlight td {
+    animation: highlight-fade 5s ease-out;
   }
 </style>
 
@@ -74,8 +74,11 @@
     const newRow = renderRow(product);
     tbody.prepend(newRow);
 
-    // Resaltar filas nuevas/modificadas
+    // Resaltar filas nuevas/modificadas y limpiar la clase después de la animación
     newRow.classList.add('highlight');
+    newRow.addEventListener('animationend', () => {
+      newRow.classList.remove('highlight');
+    }, { once: true }); // El listener se ejecuta solo una vez
 
     // Mantener el límite de 25 productos
     while (tbody.rows.length > MAX_PRODUCTS) {
@@ -92,7 +95,7 @@
   socket.on('productCreated', (newProduct) => {
     console.log('Producto creado:', newProduct);
     prependProduct(newProduct);
-    alert('Se ha creado un nuevo producto.');
+    //alert('Se ha creado un nuevo producto.');
   });
 
   // Escuchar por un producto actualizado
@@ -109,16 +112,16 @@
 
     // Añadir la fila actualizada al principio
     prependProduct(updatedProduct);
-    alert(`Se ha actualizado el producto: ${updatedProduct.title}`);
+    //alert(`Se ha actualizado el producto: ${updatedProduct.title}`);
   });
 
-  // Escuchar por un producto eliminado
+  // Todo eliminado lógico, no físico
   socket.on('productDeleted', (productId) => {
     console.log('Producto eliminado:', productId);
     const rowToDelete = document.getElementById(`product-row-${productId}`);
     if (rowToDelete) {
       rowToDelete.remove();
-      alert('Se ha eliminado un producto.');
+      //alert('Se ha eliminado un producto.');
     }
   });
 
