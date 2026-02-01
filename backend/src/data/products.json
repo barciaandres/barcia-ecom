@@ -7,7 +7,7 @@
     "price": 9.99,
     "discountPercentage": 10.48,
     "rating": 2.56,
-    "stock": 97,
+    "stock": 95,
     "tags": [
       "beauty",
       "mascara"
@@ -50,7 +50,7 @@
     "minimumOrderQuantity": 48,
     "meta": {
       "createdAt": "2025-04-30T09:41:02.053Z",
-      "updatedAt": "2026-02-01T15:44:14.777Z",
+      "updatedAt": "2026-02-01T15:50:27.009Z",
       "barcode": "5784719087687",
       "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
     },
