@@ -10,20 +10,27 @@ const getProductsAdmin = async (req, res) => {
             categoriesRef.get()
         ]);
 
-        const products = [];
-        productsSnapshot.forEach(doc => {
-            products.push({
-                firestoreId: doc.id,
-                ...doc.data()
-            });
-        });
-
         const categories = [];
         categoriesSnapshot.forEach(doc => {
             categories.push({
                 id: doc.id,
                 ...doc.data()
             });
+        });
+
+        // Crear un mapa de categorías para una búsqueda eficiente
+        const categoryMap = categories.reduce((map, cat) => {
+            map[cat.id] = cat.name;
+            return map;
+        }, {});
+
+        const products = productsSnapshot.docs.map(doc => {
+            const productData = doc.data();
+            return {
+                firestoreId: doc.id,
+                ...productData,
+                category: categoryMap[productData.category] || 'Sin Categoría' // Reemplazar ID por nombre
+            };
         });
 
         res.render('products', { products, categories });
