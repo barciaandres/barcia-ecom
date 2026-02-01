@@ -27,7 +27,6 @@ import productsRouter from './routes/productsRoutes.js';
 import categoriesRouter from './routes/categoriesRoutes.js';
 import ordersRouter from './routes/ordersRoutes.js';
 import viewsRouter from './routes/viewsRoutes.js';
-import { db } from './firebase/config.js';
 
 // Configuración de Handlebars
 app.engine('handlebars', engine({
@@ -66,29 +65,15 @@ app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/categories', categoriesRouter);
 
-io.on('connection', (socket) => {
+import getDAO from './daos/factory.js';
+
+io.on('connection', async (socket) => {
   console.log('Un cliente se ha conectado');
 
-  // Función para obtener y enviar productos
-  const getAndSendProducts = async () => {
-    try {
-      const productsRef = db.collection('products').orderBy('title');
-      const snapshot = await productsRef.get();
-      const products = [];
-      snapshot.forEach(doc => {
-        products.push({
-          firestoreId: doc.id,
-          ...doc.data()
-        });
-      });
-      socket.emit('updateProducts', products); // Enviar solo al cliente que se conecta
-    } catch (error) {
-      console.error("Error obteniendo y enviando productos: ", error);
-    }
-  };
-
-  // Enviar productos al cliente recién conectado
-  getAndSendProducts();
+  // Cargar productos iniciales y enviarlos al cliente
+  const productsDao = getDAO('products');
+  const products = await productsDao.getAllProducts();
+  socket.emit('updateProducts', products.slice(0, 25)); // Envía solo los primeros 25
 
   socket.on('disconnect', () => {
     console.log('Un cliente se ha desconectado');

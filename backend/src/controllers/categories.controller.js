@@ -1,21 +1,14 @@
-import { db } from '../firebase/config.js';
+import getDAO from '../daos/factory.js';
+
+const categoriesDao = getDAO('categories');
 
 const getAllCategories = async (req, res) => {
     try {
-        const categoriesRef = db.collection('categories');
-        const snapshot = await categoriesRef.get();
+        const categories = await categoriesDao.getAllCategories();
 
-        if (snapshot.empty) {
+        if (!categories || categories.length === 0) {
             return res.status(404).send('No se encontraron categorías.');
         }
-
-        const categories = [];
-        snapshot.forEach(doc => {
-            categories.push({
-                id: doc.id,
-                ...doc.data()
-            });
-        });
 
         res.status(200).json(categories);
 

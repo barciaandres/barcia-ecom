@@ -32,9 +32,9 @@
 
   function renderRow(product) {
     const row = document.createElement('tr');
-    row.id = `product-row-${product.firestoreId}`;
+    row.id = `product-row-${product.id}`;
     row.innerHTML = `
-      <td>${product.firestoreId}</td>
+      <td>${product.id}</td>
       <td>${product.title}</td>
       <td>${product.description}</td>
       <td>${product.category}</td>
@@ -105,7 +105,7 @@
     if (!tbody) return;
 
     // Eliminar la fila vieja si existe
-    const oldRow = document.getElementById(`product-row-${updatedProduct.firestoreId}`);
+    const oldRow = document.getElementById(`product-row-${updatedProduct.id}`);
     if (oldRow) {
       oldRow.remove();
     }

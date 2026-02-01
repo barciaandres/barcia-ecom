@@ -1,22 +1,15 @@
-import { db } from '../firebase/config.js';
+import getDAO from '../daos/factory.js';
+
+const productsDao = getDAO('products');
 
 //todo Tengo que hacer pagionador
 const getAllProducts = async (req, res) => {
     try {
-        const productsRef = db.collection('products').limit(25);
-        const snapshot = await productsRef.get();
+        const products = await productsDao.getAllProducts();
 
-        if (snapshot.empty) {
+        if (!products || products.length === 0) {
             return res.status(404).send('No se encontraron productos.');
         }
-
-        const products = [];
-        snapshot.forEach(doc => {
-            products.push({
-                firestoreId: doc.id,
-                ...doc.data()
-            });
-        });
 
         res.status(200).json(products);
 
@@ -29,17 +22,13 @@ const getAllProducts = async (req, res) => {
 const getProductById = async (req, res) => {
     const { id } = req.params;
     try {
-        const productRef = db.collection('products').doc(id);
-        const doc = await productRef.get();
+        const product = await productsDao.getProductById(id);
 
-        if (!doc.exists) {
+        if (!product) {
             return res.status(404).send('No se encontró el producto.');
         }
 
-        res.status(200).json({
-            firestoreId: doc.id,
-            ...doc.data()
-        });
+        res.status(200).json(product);
 
     } catch (error) {
         console.error("Error obteniendo el producto: ", error);
@@ -51,21 +40,11 @@ const getProductById = async (req, res) => {
 const getProductsByCategory = async (req, res) => {
     const { categoryName } = req.params;
     try {
-        const productsRef = db.collection('products').limit(25);
-        const q = productsRef.where('category', '==', categoryName);
-        const snapshot = await q.get();
+        const products = await productsDao.getProductsByCategory(categoryName);
 
-        if (snapshot.empty) {
+        if (!products || products.length === 0) {
             return res.status(404).send('No se encontraron productos para esta categoría.');
         }
-
-        const products = [];
-        snapshot.forEach(doc => {
-            products.push({
-                firestoreId: doc.id,
-                ...doc.data()
-            });
-        });
 
         res.status(200).json(products);
 

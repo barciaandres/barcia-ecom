@@ -1,5 +1,7 @@
-import { db } from '../firebase/config.js';
-import { Timestamp } from 'firebase-admin/firestore';
+import getDAO from '../daos/factory.js';
+
+const ordersDao = getDAO('orders');
+const productsDao = getDAO('products');
 
 const createOrder = async (req, res) => {
     const order = req.body;
@@ -9,26 +11,19 @@ const createOrder = async (req, res) => {
     }
 
     try {
-        const batch = db.batch();
-        const ordersRef = db.collection("orders");
-
         const outOfStock = [];
+        const productsToUpdate = [];
 
-        const productPromises = order.items.map(item => db.collection("products").doc(item.firestoreId).get());
-        const productSnapshots = await Promise.all(productPromises);
-
-        productSnapshots.forEach((docSnap, index) => {
-            if (docSnap.exists) {
-                const product = docSnap.data();
-                const cartItem = order.items[index];
-
-                if (product.stock >= cartItem.quantity) {
-                    batch.update(docSnap.ref, { stock: product.stock - cartItem.quantity });
-                } else {
-                    outOfStock.push({ ...product, id: docSnap.id });
-                }
+        for (const item of order.items) {
+            const product = await productsDao.getProductById(item.id);
+            if (product.stock >= item.quantity) {
+                product.stock -= item.quantity;
+                productsToUpdate.push(product);
+            } else {
+                outOfStock.push(product);
             }
-        });
+        }
+
 
         if (outOfStock.length > 0) {
             return res.status(400).json({
@@ -37,12 +32,13 @@ const createOrder = async (req, res) => {
             });
         }
 
-        const newOrderRef = ordersRef.doc();
-        batch.set(newOrderRef, { ...order, createdAt: Timestamp.now() });
+        for (const product of productsToUpdate) {
+            await productsDao.updateProduct(product);
+        }
 
-        await batch.commit();
+        const newOrder = await ordersDao.createOrder({ ...order, createdAt: new Date() });
 
-        res.status(201).json({ orderId: newOrderRef.id });
+        res.status(201).json({ orderId: newOrder.id });
 
     } catch (error) {
         console.error("Error creando la orden: ", error);
@@ -58,27 +54,14 @@ const getOrdersByUser = async (req, res) => {
     }
 
     try {
-        const ordersRef = db.collection("orders");
-        const q = ordersRef.where("buyer.uid", "==", uid).orderBy("createdAt", "desc");
-        const snapshot = await q.get();
-
-        if (snapshot.empty) {
+        const orders = await ordersDao.getAllOrders();
+        const userOrders = orders.filter(o => o.buyer.uid === uid);
+        
+        if (!userOrders || userOrders.length === 0) {
             return res.status(404).send('No se encontraron órdenes para este usuario.');
         }
 
-        const orders = snapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                ...data,
-                id: doc.id,
-                createdAt: {
-                    seconds: data.createdAt.seconds,
-                    nanoseconds: data.createdAt.nanoseconds
-                }
-            };
-        });
-
-        res.status(200).json(orders);
+        res.status(200).json(userOrders);
 
     } catch (error) {
         console.error("Error obteniendo las órdenes: ", error);
