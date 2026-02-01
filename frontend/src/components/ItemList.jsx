@@ -10,7 +10,7 @@ function ItemList({ products }) {
         <Container>
             <Row>
                 {products.map((product) => (
-                    <Col xs={6} md={4} lg={3} key={product.firestoreId}>
+                    <Col xs={6} md={4} lg={3} key={product.id}>
                         <Card className='mb-4'>
                             <Card.Img variant="top" src={product.thumbnail} />
                             <Card.Body className="d-flex flex-column justify-content-between">
@@ -30,7 +30,7 @@ function ItemList({ products }) {
                                 }}>
                                     {product.description}
                                 </Card.Text>
-                                <Button as={Link} to={`/products/${product.firestoreId}`} variant="primary">Ver producto</Button>
+                                <Button as={Link} to={`/products/${product.id}`} variant="primary">Ver producto</Button>
                             </Card.Body>
                         </Card>
                     </Col>
