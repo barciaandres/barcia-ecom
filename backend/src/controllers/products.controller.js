@@ -1,8 +1,9 @@
 import { db } from '../firebase/config.js';
 
+//todo Tengo que hacer pagionador
 const getAllProducts = async (req, res) => {
     try {
-        const productsRef = db.collection('products');
+        const productsRef = db.collection('products').limit(25);
         const snapshot = await productsRef.get();
 
         if (snapshot.empty) {
@@ -46,10 +47,11 @@ const getProductById = async (req, res) => {
     }
 };
 
+//todo paginador
 const getProductsByCategory = async (req, res) => {
     const { categoryName } = req.params;
     try {
-        const productsRef = db.collection('products');
+        const productsRef = db.collection('products').limit(25);
         const q = productsRef.where('category', '==', categoryName);
         const snapshot = await q.get();
 

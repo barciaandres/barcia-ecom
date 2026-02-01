@@ -1,3 +1,19 @@
+<style>
+  @keyframes highlight-fade {
+    from {
+      background-color: #d4edda;
+    }
+
+    to {
+      background-color: transparent;
+    }
+  }
+
+  .highlight {
+    animation: highlight-fade 3s ease-out;
+  }
+</style>
+
 <h1>Productos en Tiempo Real</h1>
 
 <div id="products-list">
@@ -58,13 +74,14 @@
     const newRow = renderRow(product);
     tbody.prepend(newRow);
 
+    // Resaltar filas nuevas/modificadas
+    newRow.classList.add('highlight');
+
     // Mantener el límite de 25 productos
     while (tbody.rows.length > MAX_PRODUCTS) {
       tbody.deleteRow(tbody.rows.length - 1);
     }
   }
-
-  // --- Socket.IO Event Listeners ---
 
   // Carga inicial de productos
   socket.on('updateProducts', (products) => {

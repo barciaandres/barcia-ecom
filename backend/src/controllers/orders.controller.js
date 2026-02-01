@@ -66,12 +66,16 @@ const getOrdersByUser = async (req, res) => {
             return res.status(404).send('No se encontraron órdenes para este usuario.');
         }
 
-        const orders = [];
-        snapshot.forEach(doc => {
-            orders.push({
+        const orders = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                ...data,
                 id: doc.id,
-                ...doc.data()
-            });
+                createdAt: {
+                    seconds: data.createdAt.seconds,
+                    nanoseconds: data.createdAt.nanoseconds
+                }
+            };
         });
 
         res.status(200).json(orders);

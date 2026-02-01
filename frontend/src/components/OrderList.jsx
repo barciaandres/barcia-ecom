@@ -14,7 +14,10 @@ function OrderList({ orders }) {
                 {orders.map((order, index) => (
                     <Accordion.Item eventKey={index.toString()} key={order.id}>
                         <Accordion.Header>
-                            Orden ID: {order.id} - Fecha: {new Date(order.createdAt.seconds * 1000).toLocaleDateString()} - Total: ${order.total}
+                            Orden ID: {order.id} - Fecha: {new Date(order.createdAt.seconds * 1000).toLocaleString('es-ES', {
+                                dateStyle: 'long',
+                                timeStyle: 'long'
+                            })} - Total: ${order.total}
                         </Accordion.Header>
                         <Accordion.Body>
                             <h5>Comprador:</h5>
