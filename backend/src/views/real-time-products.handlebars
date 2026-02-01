@@ -7,13 +7,30 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io({ transports: ['polling'] });
+  const MAX_PRODUCTS = 25;
 
-  // Variable para ver si es la carga inicial, así el mensaje sale solo cuando hay cambios
-  let isInitialLoad = true;
+  // --- Helper Functions ---
+  function getTableBody() {
+    return document.querySelector('#products-list table tbody');
+  }
 
-  function renderProducts(products) {
-    const productsList = document.getElementById('products-list');
-    productsList.innerHTML = '';
+  function renderRow(product) {
+    const row = document.createElement('tr');
+    row.id = `product-row-${product.firestoreId}`;
+    row.innerHTML = `
+      <td>${product.firestoreId}</td>
+      <td>${product.title}</td>
+      <td>${product.description}</td>
+      <td>${product.category}</td>
+      <td>$${product.price}</td>
+      <td>${product.stock}</td>
+    `;
+    return row;
+  }
+
+  function renderInitialProducts(products) {
+    const productsListDiv = document.getElementById('products-list');
+    productsListDiv.innerHTML = '';
     const table = document.createElement('table');
     table.classList.add('table', 'table-striped');
     table.innerHTML = `
@@ -28,28 +45,63 @@
         </tr>
       </thead>
       <tbody>
-      ${products.map(product => `
-        <tr>
-          <td>${product.firestoreId}</td>
-          <td>${product.title}</td>
-          <td>${product.description}</td>
-          <td>${product.category}</td>
-          <td>$${product.price}</td>
-          <td>${product.stock}</td>
-        </tr>
-      `).join('')}
+        ${products.map(p => renderRow(p).outerHTML).join('')}
       </tbody>
     `;
-    productsList.appendChild(table);
+    productsListDiv.appendChild(table);
   }
 
+  function prependProduct(product) {
+    const tbody = getTableBody();
+    if (!tbody) return;
 
+    const newRow = renderRow(product);
+    tbody.prepend(newRow);
+
+    // Mantener el límite de 25 productos
+    while (tbody.rows.length > MAX_PRODUCTS) {
+      tbody.deleteRow(tbody.rows.length - 1);
+    }
+  }
+
+  // --- Socket.IO Event Listeners ---
+
+  // Carga inicial de productos
   socket.on('updateProducts', (products) => {
-    renderProducts(products);
-    if (!isInitialLoad) {
-      alert('Se actualizaron los productos.');
-    } else {
-      isInitialLoad = false;
+    renderInitialProducts(products);
+  });
+
+  // Escuchar por un nuevo producto creado
+  socket.on('productCreated', (newProduct) => {
+    console.log('Producto creado:', newProduct);
+    prependProduct(newProduct);
+    alert('Se ha creado un nuevo producto.');
+  });
+
+  // Escuchar por un producto actualizado
+  socket.on('productUpdated', (updatedProduct) => {
+    console.log('Producto actualizado:', updatedProduct);
+    const tbody = getTableBody();
+    if (!tbody) return;
+
+    // Eliminar la fila vieja si existe
+    const oldRow = document.getElementById(`product-row-${updatedProduct.firestoreId}`);
+    if (oldRow) {
+      oldRow.remove();
+    }
+
+    // Añadir la fila actualizada al principio
+    prependProduct(updatedProduct);
+    alert(`Se ha actualizado el producto: ${updatedProduct.title}`);
+  });
+
+  // Escuchar por un producto eliminado
+  socket.on('productDeleted', (productId) => {
+    console.log('Producto eliminado:', productId);
+    const rowToDelete = document.getElementById(`product-row-${productId}`);
+    if (rowToDelete) {
+      rowToDelete.remove();
+      alert('Se ha eliminado un producto.');
     }
   });
 
