@@ -1,9 +1,13 @@
 import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Categories JSON DAO
 class CategoriesJsonDao {
     constructor() {
-        this.path = './src/data/categories.json';
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        this.path = path.join(__dirname, '../data/categories.json');
     }
 
     async getAllCategories() {

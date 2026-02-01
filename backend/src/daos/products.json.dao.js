@@ -1,10 +1,13 @@
 import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Products JSON DAO
 class ProductsJsonDao {
     constructor() {
-        // En el futuro, la ruta al archivo JSON podría venir de una configuración
-        this.path = './src/data/products.json';
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        this.path = path.join(__dirname, '../data/products.json');
     }
 
     async getAllProducts() {
