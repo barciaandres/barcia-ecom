@@ -21,6 +21,18 @@ const getProductsAdmin = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         const { title, brand, category, description, thumbnail, price, stock } = req.body;
+
+        // Basic validation
+        if (!title || !brand || !category || !description || !price || !stock) {
+            return res.status(400).send('Todos los campos obligatorios deben ser proporcionados.');
+        }
+        if (parseFloat(price) <= 0) {
+            return res.status(400).send('El precio debe ser un número positivo.');
+        }
+        if (parseInt(stock, 10) < 0) {
+            return res.status(400).send('El stock debe ser un número no negativo.');
+        }
+
         const newProduct = {
             title,
             brand,
@@ -29,10 +41,6 @@ const createProduct = async (req, res) => {
             thumbnail,
             price: parseFloat(price),
             stock: parseInt(stock, 10),
-            meta: {
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            }
         };
         const createdProduct = await productsDao.createProduct(newProduct);
         req.io.emit('productCreated', createdProduct);
@@ -68,29 +76,35 @@ const getEditProductForm = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const { title, brand, category, description, thumbnail, price, stock } = req.body;
-        const product = await productsDao.getProductById(req.params.id);
+        const productId = req.params.id;
+        const { title, brand, category, description, thumbnail, price, stock } = req.body; // Reintroduced brand
 
-        if (!product) {
-            return res.status(404).send('Producto no encontrado.');
+        // Basic validation
+        if (!title || !brand || !category || !description || !price || !stock) {
+            return res.status(400).send('Todos los campos obligatorios deben ser proporcionados.');
+        }
+        if (parseFloat(price) <= 0) {
+            return res.status(400).send('El precio debe ser un número positivo.');
+        }
+        if (parseInt(stock, 10) < 0) {
+            return res.status(400).send('El stock debe ser un número no negativo.');
         }
 
-        const updatedProduct = {
-            ...product,
-            title,
+        const updates = {
+            title, // Use title directly
             brand,
             category,
             description,
-            thumbnail,
+            thumbnail, // Use thumbnail directly
             price: parseFloat(price),
             stock: parseInt(stock, 10),
-            meta: {
-                ...product.meta,
-                updatedAt: new Date().toISOString()
-            }
         };
         
-        await productsDao.updateProduct(updatedProduct);
+        const updatedProduct = await productsDao.updateProduct(productId, updates);
+
+        if (!updatedProduct) {
+            return res.status(404).send('Producto no encontrado.');
+        }
 
         req.io.emit('productUpdated', updatedProduct);
 
@@ -100,7 +114,6 @@ const updateProduct = async (req, res) => {
         res.status(500).send('Error del servidor al actualizar el producto.');
     }
 };
-
 const deleteProduct = async (req, res) => {
     try {
         const productId = req.params.id;

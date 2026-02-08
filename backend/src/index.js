@@ -4,6 +4,7 @@ import cors from 'cors';
 import { engine } from 'express-handlebars';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 import http from 'http';
 import { Server as SocketServer } from 'socket.io';
@@ -23,10 +24,22 @@ const port = 8080;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Database Connection
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('MongoDB Conectado...');
+  } catch (err) {
+    console.error('Error al conectar a MongoDB:', err.message);
+    process.exit(1); // Exit process with failure
+  }
+};
+
 import productsRouter from './routes/productsRoutes.js';
 import categoriesRouter from './routes/categoriesRoutes.js';
 import ordersRouter from './routes/ordersRoutes.js';
 import viewsRouter from './routes/viewsRoutes.js';
+import usersRoutes from './routes/usersRoutes.js'; // Added
 
 // Configuración de Handlebars
 app.engine('handlebars', engine({
@@ -64,6 +77,7 @@ app.use('/views', viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/categories', categoriesRouter);
+app.use('/api/users', usersRoutes);
 
 import getDAO from './daos/factory.js';
 
@@ -80,6 +94,9 @@ io.on('connection', async (socket) => {
   });
 });
 
-server.listen(port, () => {
-  console.log(`Servidor corriendo en el puerto ${port}`);
+// Start the server after connecting to the database
+connectDB().then(() => {
+  server.listen(port, () => {
+    console.log(`Servidor corriendo en el puerto ${port}`);
+  });
 });

@@ -1,8 +1,9 @@
 import getDAO from '../daos/factory.js';
 
 const productsDao = getDAO('products');
+const categoriesDao = getDAO('categories');
 
-//todo Tengo que hacer pagionador
+//todo Tengo que hacer paginador
 const getAllProducts = async (req, res) => {
     try {
         const products = await productsDao.getAllProducts();
@@ -38,9 +39,9 @@ const getProductById = async (req, res) => {
 
 //todo paginador
 const getProductsByCategory = async (req, res) => {
-    const { categoryName } = req.params;
+    const { categorySlug } = req.params;
     try {
-        const products = await productsDao.getProductsByCategory(categoryName);
+        const products = await productsDao.getProductsByCategory(categorySlug);
 
         if (!products || products.length === 0) {
             return res.status(404).send('No se encontraron productos para esta categoría.');

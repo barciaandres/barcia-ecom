@@ -9,7 +9,7 @@ const router = Router();
 
 router.get('/', getAllProducts);
 router.get('/:id', getProductById);
-router.get('/category/:categoryName', getProductsByCategory);
+router.get('/category/:categorySlug', getProductsByCategory);
 
 export default router;
 
