@@ -20,7 +20,11 @@ function OrderListContainer() {
 
         const fetchOrders = async () => {
             try {
-                const response = await fetch(`/api/orders/${currentUser.uid}`);
+                const response = await fetch(`/api/orders`, {
+                    headers: {
+                        'Authorization': `Bearer ${currentUser.token}`
+                    }
+                });
                 if (!response.ok) {
                     if (response.status === 404) {
                         setOrders([]); // No orders found for the user

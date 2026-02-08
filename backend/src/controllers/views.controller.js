@@ -22,7 +22,6 @@ const createProduct = async (req, res) => {
     try {
         const { title, brand, category, description, thumbnail, price, stock } = req.body;
 
-        // Basic validation
         if (!title || !brand || !category || !description || !price || !stock) {
             return res.status(400).send('Todos los campos obligatorios deben ser proporcionados.');
         }
@@ -77,9 +76,9 @@ const getEditProductForm = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        const { title, brand, category, description, thumbnail, price, stock } = req.body; // Reintroduced brand
+        const { title, brand, category, description, thumbnail, price, stock } = req.body;
 
-        // Basic validation
+
         if (!title || !brand || !category || !description || !price || !stock) {
             return res.status(400).send('Todos los campos obligatorios deben ser proporcionados.');
         }
@@ -91,15 +90,15 @@ const updateProduct = async (req, res) => {
         }
 
         const updates = {
-            title, // Use title directly
+            title,
             brand,
             category,
             description,
-            thumbnail, // Use thumbnail directly
+            thumbnail,
             price: parseFloat(price),
             stock: parseInt(stock, 10),
         };
-        
+
         const updatedProduct = await productsDao.updateProduct(productId, updates);
 
         if (!updatedProduct) {
@@ -119,7 +118,7 @@ const deleteProduct = async (req, res) => {
         const productId = req.params.id;
         await productsDao.deleteProduct(productId);
         req.io.emit('productDeleted', productId);
-        
+
         res.redirect('/views/products');
     } catch (error) {
         console.error("Error eliminando producto: ", error);

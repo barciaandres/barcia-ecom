@@ -16,6 +16,9 @@ function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [name, setName] = useState(''); // Added
+    const [address, setAddress] = useState(''); // Added
+    const [phone, setPhone] = useState(''); // Added
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -30,7 +33,7 @@ function Register() {
         setLoading(true);
 
         try {
-            await signup(email, password);
+            await signup(email, password, name, address, phone); // Updated signup call
             Swal.fire({
                 icon: 'success',
                 title: '¡Registro exitoso!',
@@ -55,6 +58,16 @@ function Register() {
                         <Card.Body>
                             {error && <Alert variant="danger">{error}</Alert>}
                             <Form onSubmit={handleSubmit}>
+                                <Form.Group className="mb-3" controlId="formBasicName">
+                                    <Form.Label>Nombre</Form.Label>
+                                    <Form.Control 
+                                        type="text" 
+                                        value={name} 
+                                        onChange={(e) => setName(e.target.value)} 
+                                        placeholder="Ingresa tu nombre" 
+                                        required 
+                                    />
+                                </Form.Group>
                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control 
@@ -85,6 +98,26 @@ function Register() {
                                         onChange={(e) => setPasswordConfirm(e.target.value)} 
                                         placeholder="Confirma la contraseña" 
                                         required 
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3" controlId="formBasicAddress">
+                                    <Form.Label>Dirección</Form.Label>
+                                    <Form.Control 
+                                        type="text" 
+                                        value={address} 
+                                        onChange={(e) => setAddress(e.target.value)} 
+                                        placeholder="Ingresa tu dirección" 
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3" controlId="formBasicPhone">
+                                    <Form.Label>Teléfono</Form.Label>
+                                    <Form.Control 
+                                        type="text" 
+                                        value={phone} 
+                                        onChange={(e) => setPhone(e.target.value)} 
+                                        placeholder="Ingresa tu teléfono" 
                                     />
                                 </Form.Group>
                                 

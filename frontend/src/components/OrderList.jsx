@@ -14,16 +14,16 @@ function OrderList({ orders }) {
                 {orders.map((order, index) => (
                     <Accordion.Item eventKey={index.toString()} key={order.id}>
                         <Accordion.Header>
-                            Orden ID: {order.id} - Fecha: {new Date(order.createdAt.seconds * 1000).toLocaleString('es-ES', {
+                            Orden ID: {order.id} - Fecha: {new Date(order.date).toLocaleString('es-ES', { // Use order.date
                                 dateStyle: 'long',
                                 timeStyle: 'long'
                             })} - Total: ${order.total}
                         </Accordion.Header>
                         <Accordion.Body>
                             <h5>Comprador:</h5>
-                            <p>Nombre: {order.buyer.name}<br />
-                                Email: {order.buyer.email}<br />
-                                Teléfono: {order.buyer.phone}</p>
+                            <p>Nombre: {order.name}<br />
+                                Email: {order.email}<br />
+                                Teléfono: {order.phone}</p>
                             <h5>Items:</h5>
                             <Table striped bordered hover size="sm">
                                 <thead>
@@ -33,15 +33,9 @@ function OrderList({ orders }) {
                                         <th>Precio</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {order.items.map(item => (
-                                        <tr key={item.firestoreId}>
-                                            <td>{item.title}</td>
-                                            <td>{item.quantity}</td>
-                                            <td>${item.price}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
+                                <tbody>{order.products.map(item => ( // Compacted
+                                        <tr key={item.productId._id}><td>{item.productId.title}</td><td>{item.quantity}</td><td>${item.price}</td></tr>
+                                    ))}</tbody>
                             </Table>
                         </Accordion.Body>
                     </Accordion.Item>

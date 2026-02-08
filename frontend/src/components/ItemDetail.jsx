@@ -22,7 +22,7 @@ function ItemDetail({ product }) {
         return <div>Producto no encontrado.</div>;
     }
 
-    const itemInCart = cart.find(item => item.firestoreId === product.firestoreId);
+    const itemInCart = cart.find(item => item.id === product.id);
     const quantityInCart = itemInCart ? itemInCart.quantity : 0;
     const availableStock = product.stock - quantityInCart;
 
@@ -61,7 +61,7 @@ function ItemDetail({ product }) {
                                     <hr className="my-4" />
                                     <Card.Text className="text-muted">{product.description}</Card.Text>
                                     <Container className='d-flex justify-content-between mt-3'>
-                                        <Card.Text><small><strong>Rating:</strong> {product.rating}/5</small></Card.Text>
+
                                         <Card.Text><small><strong>Stock:</strong> {product.stock}</small></Card.Text>
                                     </Container>
                                 </Card.Body>

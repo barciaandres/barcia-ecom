@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
     address: String,
     phone: String,
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
-    // cart: { type: mongoose.Schema.Types.ObjectId, ref: 'carts' }, // Link to a Cart model later
+    // cart: { type: mongoose.Schema.Types.ObjectId, ref: 'carts' }, // acá puedo guardar el carrito que está sin finalizar
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });

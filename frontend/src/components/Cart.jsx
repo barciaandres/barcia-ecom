@@ -28,7 +28,7 @@ const Cart = () => {
                 </thead>
                 <tbody>
                     {cart.map(item => (
-                        <tr key={item.firestoreId} className="align-middle">
+                        <tr key={item.id} className="align-middle">
                             <td className="d-flex align-items-center" style={{ minWidth: '150px' }}>
                                 <Image src={item.thumbnail} alt={item.title} style={{ width: '40px', minWidth: '40px' }} className="me-2" />
                                 <div className="d-flex flex-column">

@@ -30,12 +30,10 @@ function Checkout() {
         setLoading(true);
 
         const order = {
-            buyer: {
-                uid: currentUser.uid,
-                email: currentUser.email,
-                name: buyerData.name,
-                phone: buyerData.phone
-            },
+            userId: currentUser.id,
+            email: currentUser.email,
+            name: buyerData.name,
+            phone: buyerData.phone,
             items: cart,
             total: totalAmount()
         };
@@ -45,6 +43,7 @@ function Checkout() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${currentUser.token}`
                 },
                 body: JSON.stringify(order),
             });

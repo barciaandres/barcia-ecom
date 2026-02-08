@@ -1,8 +1,7 @@
-import OrderModel from '../models/order.model.js'; // Import the shared OrderModel
+import OrderModel from '../models/order.model.js';
 
 class OrdersMongodbDao {
     constructor() {
-        // No need for connect here, connection should be established in index.js
     }
 
     async getAllOrders() {
