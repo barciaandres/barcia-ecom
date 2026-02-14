@@ -8,7 +8,7 @@ import EmptyCart from './EmptyCart';
 import CartItemCount from './CartItemCount';
 
 const Cart = () => {
-    const { cart, removeItem, clearCart, totalAmount } = useCart();
+    const { cart, totalAmount, clearCart } = useCart();
 
     if (cart.length === 0) {
         return <EmptyCart />;
@@ -28,22 +28,22 @@ const Cart = () => {
                 </thead>
                 <tbody>
                     {cart.map(item => (
-                        <tr key={item.id} className="align-middle">
+                        <tr key={item.product._id} className="align-middle">
                             <td className="d-flex align-items-center" style={{ minWidth: '150px' }}>
-                                <Image src={item.thumbnail} alt={item.title} style={{ width: '40px', minWidth: '40px' }} className="me-2" />
+                                <Image src={item.product.thumbnail} alt={item.product.title} style={{ width: '40px', minWidth: '40px' }} className="me-2" />
                                 <div className="d-flex flex-column">
-                                    <span style={{ fontSize: '0.9rem' }}>{item.title}</span>
-                                    <small className="d-md-none text-muted">${item.price}</small>
+                                    <span style={{ fontSize: '0.9rem' }}>{item.product.title}</span>
+                                    <small className="d-md-none text-muted">${item.product.price}</small>
                                 </div>
                             </td>
                             <td><CartItemCount item={item} /></td>
-                            <td className="d-none d-md-table-cell">${item.price}</td>
-                            <td className="fw-bold">${(item.quantity * item.price).toFixed(2)}</td>
+                            <td className="d-none d-md-table-cell">${item.product.price}</td>
+                            <td className="fw-bold">${(item.quantity * item.product.price).toFixed(2)}</td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-            <h3>Total: ${totalAmount()}</h3>
+            <h3>Total: ${totalAmount.toFixed(2)}</h3>
             <div className="d-flex justify-content-between mt-4">
                 <Button variant="danger" onClick={clearCart}>Vaciar Carrito</Button>
                 <Link to="/checkout">

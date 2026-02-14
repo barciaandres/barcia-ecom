@@ -40,6 +40,7 @@ import categoriesRouter from './routes/categoriesRoutes.js';
 import ordersRouter from './routes/ordersRoutes.js';
 import viewsRouter from './routes/viewsRoutes.js';
 import usersRoutes from './routes/usersRoutes.js'; // Added
+import cartsRouter from './routes/cartsRoutes.js';
 
 // Configuración de Handlebars
 app.engine('handlebars', engine({
@@ -78,6 +79,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/users', usersRoutes);
+app.use('/api/carts', cartsRouter);
 
 import getDAO from './daos/factory.js';
 

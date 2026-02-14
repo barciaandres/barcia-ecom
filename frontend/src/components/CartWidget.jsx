@@ -4,14 +4,12 @@ import { useCart } from '../context/CartContext';
 
 const CartWidget = () => {
     const { totalQuantity } = useCart();
-    const quantity = totalQuantity();
-
     return (
         <ButtonGroup>
-            {quantity > 0 ? (
+            {totalQuantity > 0 ? (
                 <Button variant="outline-success">
                     <i className="bi bi-cart-fill"> </i>
-                    <span className="badge rounded-pill bg-danger">{quantity}</span>
+                    <span className="badge rounded-pill bg-danger">{totalQuantity}</span>
                 </Button>
             ) : (
                 <Button variant="outline-secondary">
