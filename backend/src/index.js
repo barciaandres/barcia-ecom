@@ -42,6 +42,8 @@ import viewsRouter from './routes/viewsRoutes.js';
 import usersRoutes from './routes/usersRoutes.js'; // Added
 import cartsRouter from './routes/cartsRoutes.js';
 
+console.log('[index.js] File loaded');
+
 // Configuración de Handlebars
 app.engine('handlebars', engine({
   helpers: {
@@ -77,7 +79,10 @@ app.use('/views', viewsRouter);
 // Rutas de la API
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
-app.use('/api/categories', categoriesRouter);
+app.use('/api/categories', (req, res, next) => {
+  console.log('[index.js] Request received for /api/categories');
+  categoriesRouter(req, res, next);
+});
 app.use('/api/users', usersRoutes);
 app.use('/api/carts', cartsRouter);
 
@@ -85,12 +90,12 @@ import getDAO from './daos/factory.js';
 
 // io.on('connection', async (socket) => {
 //   console.log('Un cliente se ha conectado');
-
+//
 //   // Cargar productos iniciales y enviarlos al cliente
 //   const productsDao = getDAO('products');
 //   const products = await productsDao.getAllProducts();
 //   socket.emit('updateProducts', products.slice(0, 10)); // Envía solo los primeros 10
-
+//
 //   socket.on('disconnect', () => {
 //     console.log('Un cliente se ha desconectado');
 //   });
