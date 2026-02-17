@@ -35,42 +35,72 @@ function Checkout() {
             name: buyerData.name,
             phone: buyerData.phone,
             items: cart,
-            total: totalAmount()
+            total: totalAmount
         };
 
-        try {
-            const response = await fetch('/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${currentUser.token}`
-                },
-                body: JSON.stringify(order),
-            });
+                try {
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Error al crear la orden');
-            }
+                    const response = await fetch('/api/orders', {
 
-            const { orderId: id } = await response.json();
-            setOrderId(id);
-            clearCart();
-            Swal.fire({
-                icon: 'success',
-                title: '¡Orden creada!',
-                text: `Tu número de orden es: ${id}`,
-            });
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al crear la orden',
-                text: error.message,
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
+                        method: 'POST',
+
+                        headers: {
+
+                            'Content-Type': 'application/json',
+
+                            'Authorization': `Bearer ${currentUser.token}`
+
+                        },
+
+                        body: JSON.stringify(order),
+
+                    });
+
+        
+
+                    if (!response.ok) {
+
+                        const errorData = await response.json();
+
+                        throw new Error(errorData.error || 'Error al crear la orden');
+
+                    }
+
+        
+
+                    const { orderId: id } = await response.json();
+
+                    setOrderId(id);
+
+                    clearCart();
+
+                    await Swal.fire({
+
+                        icon: 'success',
+
+                        title: '¡Orden creada!',
+
+                        text: `Tu número de orden es: ${id}`,
+
+                    });
+
+                } catch (error) {
+
+                    Swal.fire({
+
+                        icon: 'error',
+
+                        title: 'Error al crear la orden',
+
+                        text: error.message,
+
+                    });
+
+                } finally {
+
+                    setLoading(false);
+
+                }    };
 
     if (orderId) {
         return (
@@ -97,8 +127,8 @@ function Checkout() {
         );
     }
 
-    const quantity = totalQuantity();
-    const amount = totalAmount();
+    const quantity = totalQuantity;
+    const amount = totalAmount;
     return (
         <Container>
             <Row className="justify-content-md-center mt-4">

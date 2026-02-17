@@ -31,7 +31,7 @@ function ItemListContainer() {
                     }
                 } else {
                     const data = await response.json();
-                    setProducts(data);
+                    setProducts(data.payload);
                 }
 
             } catch (err) {

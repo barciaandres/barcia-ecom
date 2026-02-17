@@ -3,27 +3,55 @@ import getDAO from '../daos/factory.js';
 const productsDao = getDAO('products');
 const categoriesDao = getDAO('categories');
 
-//todo Tengo que hacer paginador
 const getAllProducts = async (req, res) => {
     try {
-        const products = await productsDao.getAllProducts();
+        const { limit = 10, page = 1, sort, query } = req.query;
 
-        if (!products || products.length === 0) {
-            return res.status(404).send('No se encontraron productos.');
+        const options = {
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+            lean: true
+        };
+
+        if (sort) {
+            options.sort = { price: sort === 'asc' ? 1 : -1 };
         }
 
-        res.status(200).json(products);
+        const queryOptions = {};
+        if (query) {
+            queryOptions.$or = [
+                { category: { $regex: query, $options: 'i' } },
+                { status: { $regex: query, $options: 'i' } }
+            ];
+        }
+
+        const result = await productsDao.getAllProducts(queryOptions, options);
+
+        const response = {
+            status: 'success',
+            payload: result.docs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}&sort=${sort || ''}&query=${query || ''}` : null,
+            nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}&sort=${sort || ''}&query=${query || ''}` : null
+        };
+
+        res.status(200).json(response);
 
     } catch (error) {
         console.error("Error obteniendo productos: ", error);
-        res.status(500).send('Error del servidor al obtener los productos.');
+        res.status(500).json({ status: 'error', message: 'Error del servidor al obtener los productos.' });
     }
 };
 
 const getProductById = async (req, res) => {
-    const { id } = req.params;
+    const { pid } = req.params;
     try {
-        const product = await productsDao.getProductById(id);
+        const product = await productsDao.getProductById(pid);
 
         if (!product) {
             return res.status(404).send('No se encontró el producto.');
@@ -37,21 +65,47 @@ const getProductById = async (req, res) => {
     }
 };
 
-//todo paginador
 const getProductsByCategory = async (req, res) => {
     const { categorySlug } = req.params;
-    try {
-        const products = await productsDao.getProductsByCategory(categorySlug);
+    const { limit = 10, page = 1, sort } = req.query;
 
-        if (!products || products.length === 0) {
-            return res.status(404).send('No se encontraron productos para esta categoría.');
+    try {
+        const options = {
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+            lean: true
+        };
+
+        if (sort) {
+            options.sort = { price: sort === 'asc' ? 1 : -1 };
         }
 
-        res.status(200).json(products);
+        const queryOptions = { category: categorySlug };
+
+        const result = await productsDao.getAllProducts(queryOptions, options);
+
+        if (!result.docs || result.docs.length === 0) {
+            return res.status(404).json({ status: 'error', message: 'No se encontraron productos para esta categoría.' });
+        }
+
+        const response = {
+            status: 'success',
+            payload: result.docs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `/api/products/category/${categorySlug}?page=${result.prevPage}&limit=${limit}&sort=${sort || ''}` : null,
+            nextLink: result.hasNextPage ? `/api/products/category/${categorySlug}?page=${result.nextPage}&limit=${limit}&sort=${sort || ''}` : null
+        };
+
+        res.status(200).json(response);
 
     } catch (error) {
         console.error("Error obteniendo productos por categoría: ", error);
-        res.status(500).send('Error del servidor al obtener los productos.');
+        res.status(500).json({ status: 'error', message: 'Error del servidor al obtener los productos.' });
     }
 };
 

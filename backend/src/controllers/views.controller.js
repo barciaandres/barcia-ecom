@@ -5,8 +5,22 @@ const categoriesDao = getDAO('categories');
 
 const getProductsAdmin = async (req, res) => {
     try {
+        const { limit = 10, page = 1, sort, query } = req.query;
+        const options = {
+            page: parseInt(page, 10),
+            limit: parseInt(limit, 10),
+            lean: true
+        };
+        if (sort) {
+            options.sort = { price: sort === 'asc' ? 1 : -1 };
+        }
+        const queryOptions = {};
+        if (query) {
+            queryOptions.category = { $regex: query, $options: 'i' };
+        }
+
         const [products, categories] = await Promise.all([
-            productsDao.getAllProducts(),
+            productsDao.getAllProducts(queryOptions, options),
             categoriesDao.getAllCategories()
         ]);
 
@@ -54,7 +68,7 @@ const createProduct = async (req, res) => {
 const getEditProductForm = async (req, res) => {
     try {
         const [product, categories] = await Promise.all([
-            productsDao.getProductById(req.params.id),
+            productsDao.getProductById(req.params.pid),
             categoriesDao.getAllCategories()
         ]);
 
@@ -75,7 +89,7 @@ const getEditProductForm = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const productId = req.params.id;
+        const productId = req.params.pid;
         const { title, brand, category, description, thumbnail, price, stock } = req.body;
 
 
@@ -115,7 +129,7 @@ const updateProduct = async (req, res) => {
 };
 const deleteProduct = async (req, res) => {
     try {
-        const productId = req.params.id;
+        const productId = req.params.pid;
         await productsDao.deleteProduct(productId);
         req.io.emit('productDeleted', productId);
 
@@ -128,8 +142,8 @@ const deleteProduct = async (req, res) => {
 
 const getHomePage = async (req, res) => {
     try {
-        const products = await productsDao.getAllProducts();
-        res.render('home', { products: products.slice(0, 25) });
+        const products = await productsDao.getAllProducts({}, { limit: 25, page: 1, lean: true });
+        res.render('home', { products });
 
     } catch (error) {
         console.error("Error obteniendo productos para home: ", error);

@@ -13,9 +13,9 @@ const router = Router();
 
 router.get('/products', getProductsAdmin);
 router.post('/products', createProduct);
-router.get('/products/edit/:id', getEditProductForm);
-router.post('/products/edit/:id', updateProduct);
-router.post('/products/delete/:id', deleteProduct);
+router.get('/products/edit/:pid', getEditProductForm);
+router.post('/products/edit/:pid', updateProduct);
+router.post('/products/delete/:pid', deleteProduct);
 router.get('/home', getHomePage);
 router.get('/realtimeproducts', getRealTimeProducts);
 

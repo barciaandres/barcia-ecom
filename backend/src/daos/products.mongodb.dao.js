@@ -4,16 +4,13 @@ class ProductsMongodbDao {
     constructor() {
     }
 
-    async getAllProducts() {
-        return await ProductModel.find().lean();
+    async getAllProducts(queryOptions, options) {
+        const result = await ProductModel.paginate(queryOptions, options);
+        return result;
     }
 
-    async getProductById(id) {
-        return await ProductModel.findOne({ id: id }).lean();
-    }
-
-    async getProductsByCategory(categorySlug) {
-        return await ProductModel.find({ category: categorySlug }).lean();
+    async getProductById(pid) {
+        return await ProductModel.findById(pid).lean();
     }
 
     async createProduct(product) {
@@ -25,17 +22,17 @@ class ProductsMongodbDao {
         return newProduct.lean();
     }
 
-    async updateProduct(id, updates) {
-        const updated = await ProductModel.findOneAndUpdate(
-            { id: id },
-            { $set: updates },
+    async updateProduct(pid, updates) {
+        const updated = await ProductModel.findByIdAndUpdate(
+            pid,
+            updates,
             { new: true }
         ).lean();
         return updated;
     }
 
-    async deleteProduct(id) {
-        await ProductModel.deleteOne({ id: id });
+    async deleteProduct(pid) {
+        await ProductModel.findByIdAndDelete(pid);
     }
 }
 

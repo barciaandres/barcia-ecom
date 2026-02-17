@@ -13,9 +13,9 @@ const createOrder = async (req, res) => {
         const outOfStock = [];
         const productsInOrder = [];
         for (const item of order.items) {
-            const product = await productsDao.getProductById(item.id);
+            const product = item.product;
             if (!product) {
-                outOfStock.push({ id: item.id, title: 'Producto no encontrado' });
+                outOfStock.push({ id: item.product._id, title: 'Producto no encontrado' });
                 continue;
             }
             if (product.stock >= item.quantity) {
@@ -24,9 +24,8 @@ const createOrder = async (req, res) => {
                     quantity: item.quantity,
                     price: product.price
                 });
-                product.stock -= item.quantity;
             } else {
-                outOfStock.push({ id: item.id, title: product.title, requested: item.quantity, available: product.stock });
+                outOfStock.push({ id: product._id, title: product.title, requested: item.quantity, available: product.stock });
             }
         }
         if (outOfStock.length > 0) {
@@ -35,11 +34,8 @@ const createOrder = async (req, res) => {
                 products: outOfStock.map(p => ({ id: p.id, title: p.title || p.id, requested: p.requested, available: p.available }))
             });
         }
-        for (const productDetail of order.items) {
-            const originalProduct = await productsDao.getProductById(productDetail.id);
-            if (originalProduct) {
-                await productsDao.updateProduct(originalProduct.id, { stock: originalProduct.stock - productDetail.quantity }); // Use id for update
-            }
+        for (const item of order.items) {
+            await productsDao.updateProduct(item.product._id, { $inc: { stock: -item.quantity } });
         }
         const newOrder = await ordersDao.createOrder({
             userId: userId,
