@@ -89,14 +89,13 @@ io.on('connection', async (socket) => {
   // Cargar productos iniciales y enviarlos al cliente
   const productsDao = getDAO('products');
   const products = await productsDao.getAllProducts();
-  socket.emit('updateProducts', products.slice(0, 25)); // Envía solo los primeros 25
+  socket.emit('updateProducts', products.slice(0, 10)); // Envía solo los primeros 10
 
   socket.on('disconnect', () => {
     console.log('Un cliente se ha desconectado');
   });
 });
 
-// Start the server after connecting to the database
 connectDB().then(() => {
   server.listen(port, () => {
     console.log(`Servidor corriendo en el puerto ${port}`);

@@ -23,9 +23,9 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io({ transports: ['polling'] });
-  const MAX_PRODUCTS = 25;
+  const MAX_PRODUCTS = 10;
 
-  // --- Helper Functions ---
+
   function getTableBody() {
     return document.querySelector('#products-list table tbody');
   }
@@ -78,7 +78,7 @@
     newRow.classList.add('highlight');
     newRow.addEventListener('animationend', () => {
       newRow.classList.remove('highlight');
-    }, { once: true }); // El listener se ejecuta solo una vez
+    }, { once: true }); // Solo una vez, de lo contrario no anda bien
 
     // Mantener el límite de 25 productos
     while (tbody.rows.length > MAX_PRODUCTS) {
@@ -110,9 +110,9 @@
       oldRow.remove();
     }
 
-    // Añadir la fila actualizada al principio
+    // Agregar la fila actualizada al principio
     prependProduct(updatedProduct);
-    //alert(`Se ha actualizado el producto: ${updatedProduct.title}`);
+
   });
 
   // Todo eliminado lógico, no físico
@@ -121,7 +121,6 @@
     const rowToDelete = document.getElementById(`product-row-${productId}`);
     if (rowToDelete) {
       rowToDelete.remove();
-      //alert('Se ha eliminado un producto.');
     }
   });
 
