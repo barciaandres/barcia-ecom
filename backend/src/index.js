@@ -26,12 +26,19 @@ const __dirname = path.dirname(__filename);
 
 // Database Connection
 const connectDB = async () => {
+  console.log('[connectDB] Attempting to connect to MongoDB...');
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('MongoDB Conectado...');
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      console.error('[connectDB] MONGODB_URI environment variable is not set.');
+      return;
+    }
+    console.log(`[connectDB] MONGODB_URI found. Connecting...`);
+    await mongoose.connect(uri);
+    console.log('[connectDB] MongoDB connected successfully.');
   } catch (err) {
-    console.error('Error al conectar a MongoDB:', err.message);
-    process.exit(1); // Exit process with failure
+    console.error('[connectDB] MongoDB connection error:', err.message);
+    // Do not exit the process in a serverless environment
   }
 };
 
