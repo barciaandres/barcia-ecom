@@ -83,21 +83,19 @@ app.use('/api/carts', cartsRouter);
 
 import getDAO from './daos/factory.js';
 
-io.on('connection', async (socket) => {
-  console.log('Un cliente se ha conectado');
+// io.on('connection', async (socket) => {
+//   console.log('Un cliente se ha conectado');
 
-  // Cargar productos iniciales y enviarlos al cliente
-  const productsDao = getDAO('products');
-  const products = await productsDao.getAllProducts();
-  socket.emit('updateProducts', products.slice(0, 10)); // Envía solo los primeros 10
+//   // Cargar productos iniciales y enviarlos al cliente
+//   const productsDao = getDAO('products');
+//   const products = await productsDao.getAllProducts();
+//   socket.emit('updateProducts', products.slice(0, 10)); // Envía solo los primeros 10
 
-  socket.on('disconnect', () => {
-    console.log('Un cliente se ha desconectado');
-  });
-});
+//   socket.on('disconnect', () => {
+//     console.log('Un cliente se ha desconectado');
+//   });
+// });
 
-connectDB().then(() => {
-  server.listen(port, () => {
-    console.log(`Servidor corriendo en el puerto ${port}`);
-  });
-});
+connectDB();
+
+export default app;

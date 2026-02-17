@@ -10,7 +10,7 @@ router.use(verifyToken);
 // GET /api/carts/ - Obtener el carrito del usuario
 router.get('/', cartController.getCart);
 
-// POST /api/carts/sync - Sincronizar el carrito local con el de la BD
+// POST /api/carts/sync - Sincronizar el carrito de localstorage con el de la BD
 router.post('/sync', cartController.syncCart);
 
 // POST /api/carts/items - Agregar un ítem al carrito
