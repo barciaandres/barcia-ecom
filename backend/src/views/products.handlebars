@@ -3,6 +3,45 @@
   <button id="show-create-form-btn" class="btn btn-primary">Crear Nuevo Producto</button>
 </div>
 
+{{!-- Formulario de Filtros --}}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Filtros y Búsqueda</h5>
+        <form id="filter-form" action="/views/products" method="GET">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="query" class="form-label">Buscar por nombre</label>
+                    <input type="text" class="form-control" id="query" name="query" value="{{currentQuery}}">
+                </div>
+                <div class="col-md-3">
+                    <label for="category" class="form-label">Categoría</label>
+                    <select class="form-select" id="category" name="category">
+                        <option value="">Todas</option>
+                        {{#each categories}}
+                        <option value="{{this.slug}}" {{#if (eq this.slug ../selectedCategory)}}selected{{/if}}>{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sort" class="form-label">Ordenar por</label>
+                    <select class="form-select" id="sort" name="sort">
+                        <option value="">Sin orden</option>
+                        <option value="price-asc" {{#if (eq 'price-asc' currentSort)}}selected{{/if}}>Precio Ascendente</option>
+                        <option value="price-desc" {{#if (eq 'price-desc' currentSort)}}selected{{/if}}>Precio Descendente</option>
+                        <option value="stock-asc" {{#if (eq 'stock-asc' currentSort)}}selected{{/if}}>Stock Ascendente</option>
+                        <option value="stock-desc" {{#if (eq 'stock-desc' currentSort)}}selected{{/if}}>Stock Descendente</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                    <a href="/views/products" class="btn btn-secondary w-100 ms-2">Limpiar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 {{!-- Formulario de Alta (oculto por defecto) --}}
 <div id="create-product-form" class="card mb-4" style="display: none;">
   <div class="card-body">

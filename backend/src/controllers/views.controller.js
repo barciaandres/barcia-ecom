@@ -5,18 +5,26 @@ const categoriesDao = getDAO('categories');
 
 const getProductsAdmin = async (req, res) => {
     try {
-        const { limit = 10, page = 1, sort, query } = req.query;
+        const { limit = 10, page = 1, sort, query, category } = req.query;
         const options = {
             page: parseInt(page, 10),
             limit: parseInt(limit, 10),
             lean: true
         };
+
         if (sort) {
-            options.sort = { price: sort === 'asc' ? 1 : -1 };
+            const [field, order] = sort.split('-');
+            if ((field === 'price' || field === 'stock') && (order === 'asc' || order === 'desc')) {
+                options.sort = { [field]: order === 'asc' ? 1 : -1 };
+            }
         }
+
         const queryOptions = {};
         if (query) {
-            queryOptions.category = { $regex: query, $options: 'i' };
+            queryOptions.title = { $regex: query, $options: 'i' };
+        }
+        if (category) {
+            queryOptions.category = category;
         }
 
         const [products, categories] = await Promise.all([
@@ -24,7 +32,13 @@ const getProductsAdmin = async (req, res) => {
             categoriesDao.getAllCategories()
         ]);
 
-        res.render('products', { products, categories });
+        res.render('products', {
+            products,
+            categories,
+            selectedCategory: category,
+            currentSort: sort,
+            currentQuery: query
+        });
 
     } catch (error) {
         console.error("Error obteniendo productos: ", error);

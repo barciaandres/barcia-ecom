@@ -33,7 +33,7 @@
     <ul class="pagination">
       {{#if products.hasPrevPage}}
       <li class="page-item">
-        <a class="page-link" href="/views/products?page={{products.prevPage}}&limit={{products.limit}}&sort={{sort}}&query={{query}}">Anterior</a>
+        <a class="page-link" href="/views/products?page={{products.prevPage}}&limit={{products.limit}}&sort={{../currentSort}}&query={{../currentQuery}}&category={{../selectedCategory}}">Anterior</a>
       </li>
       {{else}}
       <li class="page-item disabled">
@@ -47,7 +47,7 @@
 
       {{#if products.hasNextPage}}
       <li class="page-item">
-        <a class="page-link" href="/views/products?page={{products.nextPage}}&limit={{products.limit}}&sort={{sort}}&query={{query}}">Siguiente</a>
+        <a class="page-link" href="/views/products?page={{products.nextPage}}&limit={{products.limit}}&sort={{../currentSort}}&query={{../currentQuery}}&category={{../selectedCategory}}">Siguiente</a>
       </li>
       {{else}}
       <li class="page-item disabled">
