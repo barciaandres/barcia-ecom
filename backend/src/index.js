@@ -89,7 +89,7 @@ io.on('connection', async (socket) => {
   // Cargar productos iniciales y enviarlos al cliente
   const productsDao = getDAO('products');
   const products = await productsDao.getAllProducts();
-  socket.emit('updateProducts', products.slice(0, 10)); // Envía solo los primeros 10
+  socket.emit('updateProducts', products.docs.slice(0, 10)); // Envía solo los primeros 10. ahora que hay paginación agrego .docs.
 
   socket.on('disconnect', () => {
     console.log('Un cliente se ha desconectado');
