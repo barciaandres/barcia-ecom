@@ -80,7 +80,7 @@
       newRow.classList.remove('highlight');
     }, { once: true }); // Solo una vez, de lo contrario no anda bien
 
-    // Mantener el límite de 25 productos
+    // Mantener el límite de x productos
     while (tbody.rows.length > MAX_PRODUCTS) {
       tbody.deleteRow(tbody.rows.length - 1);
     }

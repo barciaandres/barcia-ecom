@@ -11,6 +11,9 @@ import {
 
 const router = Router();
 
+//Profe, si llegan acá a revisar van a ver que no hay rutas de carts; están en la api
+//backend/src/routes/cartsRoutes.js
+
 router.get('/products', getProductsAdmin);
 router.post('/products', createProduct);
 router.get('/products/edit/:pid', getEditProductForm);

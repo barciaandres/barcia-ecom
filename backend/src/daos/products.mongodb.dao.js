@@ -5,12 +5,12 @@ class ProductsMongodbDao {
     }
 
     async getAllProducts(queryOptions, options) {
-        const result = await ProductModel.paginate(queryOptions, options);
+        const result = await ProductModel.paginate({ ...queryOptions, deleted: false }, options);
         return result;
     }
 
     async getProductById(pid) {
-        return await ProductModel.findById(pid).lean();
+        return await ProductModel.findOne({ _id: pid, deleted: false }).lean();
     }
 
     async createProduct(product) {
@@ -19,7 +19,7 @@ class ProductsMongodbDao {
         product.id = newId;
         const newProduct = new ProductModel(product);
         await newProduct.save();
-        return newProduct.lean();
+        return newProduct.toObject();
     }
 
     async updateProduct(pid, updates) {
@@ -30,10 +30,21 @@ class ProductsMongodbDao {
         ).lean();
         return updated;
     }
-
+    //eliminado lógico para evitar problemas al eliminar productos que están en órdenes generadas
     async deleteProduct(pid) {
-        await ProductModel.findByIdAndDelete(pid);
+        await ProductModel.findByIdAndUpdate(pid, { deleted: true });
     }
+
+    //la dejo pero no la implemento
+    async restoreProduct(pid) {
+        await ProductModel.findByIdAndUpdate(pid, { deleted: false });
+    }
+
+    //no utilizado, lo dejo para el curso, solicita un delete físico
+    async deleteProduct_fisico(id) {
+        await ProductModel.deleteOne({ id: id });
+    }
+
 }
 
 export default ProductsMongodbDao;

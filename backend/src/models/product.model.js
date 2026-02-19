@@ -11,6 +11,7 @@ const ProductSchema = new mongoose.Schema({
     category: { type: String },
     thumbnail: { type: String },
     images: { type: [String] },
+    deleted: { type: Boolean, default: false, index: true },
 });
 
 ProductSchema.plugin(mongoosePaginate);

@@ -18,7 +18,7 @@ const getDAO = (type) => {
         case 'carts':
             return new CartsMongoDbDao();
         default:
-            throw new Error('Invalid DAO type for MongoDB data source');
+            throw new Error('Opción no válida');
     }
 }
 

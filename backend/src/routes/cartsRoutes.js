@@ -11,6 +11,8 @@ router.use(verifyToken);
 router.get('/', cartController.getCart);
 
 // POST /api/carts/sync - Sincronizar el carrito de localstorage con el de la BD
+// Profe, esta función la hice para mantener un carrito en localstorage cuando no está logueado y transferirlo a la bd
+//al loguearse
 router.post('/sync', cartController.syncCart);
 
 // POST /api/carts/items - Agregar un ítem al carrito

@@ -156,7 +156,7 @@ const deleteProduct = async (req, res) => {
 
 const getHomePage = async (req, res) => {
     try {
-        const products = await productsDao.getAllProducts({}, { limit: 25, page: 1, lean: true });
+        const products = await productsDao.getAllProducts({}, { limit: 10, page: 1, lean: true });
         res.render('home', { products });
 
     } catch (error) {

@@ -27,7 +27,7 @@ class CartsMongoDbDao {
   async removeItem(userId, productId) {
     const cart = await this.getCartByUserId(userId);
     if (!cart) {
-      throw new Error('Cart not found');
+      throw new Error('El carrito no existe');
     }
     cart.items = cart.items.filter(item => item.product._id.toString() !== productId);
     await cart.save();
@@ -40,7 +40,7 @@ class CartsMongoDbDao {
     }
     const cart = await this.getCartByUserId(userId);
     if (!cart) {
-      throw new Error('Cart not found');
+      throw new Error('El carrito no existe');
     }
     const item = cart.items.find(item => item.product._id.toString() === productId);
     if (item) {

@@ -1,4 +1,4 @@
-import CategoryModel from '../models/category.model.js'; // Import the shared CategoryModel
+import CategoryModel from '../models/category.model.js';
 
 class CategoriesMongodbDao {
     constructor() { }

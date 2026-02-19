@@ -22,7 +22,7 @@ export const addItem = async (req, res) => {
     const userId = req.user.id;
     const { productId, quantity } = req.body;
     if (!productId || !quantity) {
-      return res.status(400).json({ error: 'Product ID and quantity are required' });
+      return res.status(400).json({ error: 'Se requieren producto y cantidad' });
     }
     const cart = await cartsDAO.addItem(userId, productId, quantity);
     res.json(cart);
@@ -50,7 +50,7 @@ export const updateItemQuantity = async (req, res) => {
     const { productId } = req.params;
     const { quantity } = req.body;
     if (quantity === undefined) {
-      return res.status(400).json({ error: 'Quantity is required' });
+      return res.status(400).json({ error: 'Se requiere la cantidad' });
     }
     const cart = await cartsDAO.updateItemQuantity(userId, productId, quantity);
     res.json(cart);
@@ -76,7 +76,7 @@ export const syncCart = async (req, res) => {
     const userId = req.user.id;
     const { items } = req.body; // Se espera un array de items
     if (!Array.isArray(items)) {
-      return res.status(400).json({ error: 'Cart items must be an array' });
+      return res.status(400).json({ error: 'Los ítems del carrito deben ser un array' });
     }
     const cart = await cartsDAO.syncCart(userId, items);
     res.json(cart);
